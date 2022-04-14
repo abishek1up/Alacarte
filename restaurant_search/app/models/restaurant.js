@@ -11,6 +11,7 @@ var RestaurantSchema = new mongoose.Schema({
   },
   cuisine: { type: String },
   budget: { type: Number },
+  total_review:  { type: Number },
   ratings: [Number],
   name: {type: String},
   restaurant_id: {type: Number},

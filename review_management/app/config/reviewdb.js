@@ -1,7 +1,7 @@
 
 var mongoose = require("mongoose");
 
-require("../models/order");
+require("../models/review");
  
 
 module.exports = async function connectMongo() {
