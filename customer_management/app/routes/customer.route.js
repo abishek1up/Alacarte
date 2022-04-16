@@ -6,9 +6,9 @@ const customerRoutes = express.Router()
 
 // /orders is prefix from app/index.js 
 customerRoutes.post("/", customerController.registerUser)
-customerRoutes.get("/:cust_id", customerController.getCustomerDetail)
+customerRoutes.get("/:cust_Id", customerController.getCustomerDetail)
+/* 
 customerRoutes.get("/:order_id", customerController.getOrderDetail)
-customerRoutes.get("/", customerController.getMyOrders)
-customerRoutes.delete("/:cust_id", customerController.deactivateUser
-)
+customerRoutes.get("/:cust_id", customerController.getMyOrders) */
+customerRoutes.delete("/:cust_Id", customerController.deactivateUser)
 module.exports = customerRoutes

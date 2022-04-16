@@ -18,7 +18,7 @@ module.exports = {
         return orders
     },
     cancelOrder: async (Id) => {
-        const orders = await restaurant.deleteOne({_id:Id})
+        const orders = await Order.deleteOne({_id:Id})
         return orders
     }
 }

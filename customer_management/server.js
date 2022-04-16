@@ -1,7 +1,7 @@
 require("dotenv").config()
 const app = require('./app/index')
 const http=require("http");
-const connectMongo = require("./app/config/orderdb");
+const connectMongo = require("./app/config/customerdb");
  
 //express application
 const server = http.createServer(app)

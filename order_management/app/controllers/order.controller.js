@@ -7,22 +7,24 @@ module.exports = {
         res.json(orders)
     },
     getOrder : async (req, res) => {
-        const orders = await orderService.getOrder(req.params.id)
+        const orders = await orderService.getOrder(req.params.order_id)
         res.statusCode = 200
         res.setHeader('Content-Type','application/json')
-        res.json(order)
+        res.json(orders)
     },
     placeOrder : async (req, res) => {
-        const orders = await orderService.placeOrder(req.Body)
+        await orderService.placeOrder(req.body)
         res.statusCode = 200
         res.setHeader('Content-Type','application/json')
-        res.json(orders)
+        const order = await orderService.getOrders()
+        res.json(order)
     },
     cancelOrder : async (req, res) => {
-        await orders.orderService(req.params.id)
-        res.statusCode = 200
-        res.setHeader('Content-Type','application/json')
-        const orders = await orderService.getOrders()
-        res.json(orders)
+        const check = await orderService.cancelOrder(req.params.order_id)
+        if(check.acknowledged){
+            res.statusCode = 200
+            res.setHeader('Content-Type','application/json')
+            res.json(check)
+        }
     }
 }

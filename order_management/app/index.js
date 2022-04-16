@@ -1,8 +1,9 @@
 // to define express application
 
+const bodyParser = require('body-parser')
+const jsonParser = bodyParser.json()
 const express = require('express')
 const cors = require('cors')
-const jsonParser = bodyParser.json()
 
 const orderRoutes = require('./routes/order.route')
 

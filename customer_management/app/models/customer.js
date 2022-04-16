@@ -10,11 +10,7 @@ var CustomerSchema = new mongoose.Schema({
   average_rating :  {type: Number},
 }, { collection: 'customer' });
 
-//minimum 3 letter title
-CustomerSchema.path('symbol').validate(function (value) {
-  return value && value.length >= 3;
-}, 'symbol should be minimum of 3 letters');
 
-mongoose.model('customer', CustomerSchema)
+mongoose.model('Customers', CustomerSchema)
 
-module.exports = mongoose.model('customer')
+module.exports = mongoose.model('Customers')

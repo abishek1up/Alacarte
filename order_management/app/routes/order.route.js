@@ -8,6 +8,6 @@ const orderRoutes = express.Router()
 orderRoutes.get("/", orderController.getOrders)
 orderRoutes.get("/:order_id", orderController.getOrder)
 orderRoutes.post("/", orderController.placeOrder)
-orderRoutes.delete("/order_id", orderController.cancelOrder)
+orderRoutes.delete("/:order_id", orderController.cancelOrder)
 
 module.exports = orderRoutes

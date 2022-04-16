@@ -24,10 +24,9 @@ module.exports = {
     deleteReview : async (req, res) => {
         const check = await reviewService.deleteReview(req.params.review_Id)
         if(check.acknowledged){
-            const review = await reviewService.deleteReview()
             res.statusCode = 200
             res.setHeader('Content-Type','application/json')
-            res.json(review)
+            res.json(check)
         }
     },
     updateReview : async (req, res) => {
