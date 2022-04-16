@@ -1,24 +1,28 @@
 // Business logic
 // Database etc 
 
-const Order = require("../models/review")
+const review = require("../models/review")
 
 module.exports = {
     // params is object, for parameters from controllers
     getMyReviews: async () => {
-        const restaurants = await restaurant.find().exec()
-        return restaurants
+        const reviews = await review.find().exec()
+        return reviews
     },
-    postReview: async (Id) => {
-        const restaurants = await restaurant.findOne({_id:Id})
-        return restaurants
+    getReview: async (Id) => {
+        const reviews = await review.findOne({_id:Id})
+        return reviews
     },
-    deleteReview: async (body) => {
-        const restaurants = await restaurant.create(body)
-        return restaurants
+    postReview: async (body) => {
+        const reviews = await review.create(body)
+        return reviews
     },
-    updateReview: async (Id) => {
-        const restaurants = await restaurant.deleteOne({_id:Id})
-        return restaurants
+    deleteReview: async (Id) => {
+        const reviews = await review.deleteOne({_id:Id})
+        return reviews
+    },
+    updateReview: async (Id,body) => {
+        const reviews = await review.findByIdAndUpdate(Id, {$set: body}, { new: true })  
+        return reviews
     }
 }

@@ -5,7 +5,9 @@ const reviewRoutes = express.Router()
 
 // /reviews is prefix from app/index.js 
 reviewRoutes.get("/", reviewController.getMyReviews)
-reviewRoutes.post("/:id", reviewController.postReview)
-reviewRoutes.delete("/:id", reviewController.deletereview)
-reviewRoutes.put("/:id", reviewController.updatereview)
+reviewRoutes.get("/:review_Id", reviewController.getReview)
+reviewRoutes.post("/", reviewController.postReview)
+reviewRoutes.delete("/:review_Id", reviewController.deleteReview)
+reviewRoutes.put("/:review_Id", reviewController.updateReview)
+
 module.exports = reviewRoutes
