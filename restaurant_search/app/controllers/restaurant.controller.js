@@ -10,16 +10,31 @@ module.exports = {
     },
     getRestaurant : async (req, res) => {
         const restaurants = await restaurantService.getRestaurant(req.params.id)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
         res.statusCode = 200
         res.setHeader('Content-Type','application/json')
         res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }  
     },
     createRestaurant : async (req, res) => {
-        await restaurantService.createRestaurant(req.body)
+        const restaurants = await restaurantService.createRestaurant(req.body)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
         res.statusCode = 200
         res.setHeader('Content-Type','application/json')
-        const restaurants = await restaurantService.getRestaurants()
         res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }      
     },
     deleteRestaurant : async (req, res) => {
         const check = await restaurantService.deleteRestaurant(req.params.id)
@@ -28,6 +43,12 @@ module.exports = {
             res.statusCode = 200
             res.setHeader('Content-Type','application/json')
             res.json(restaurants)
+        }
+        else
+        {
+        res.statusCode = 400
+        res.setHeader('Content-Type','application/json')
+        res.json(check)
         }
     },
     updateRestaurant : async (req, res) => {

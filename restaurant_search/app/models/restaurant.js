@@ -2,21 +2,69 @@ var mongoose = require('mongoose');
 
 var RestaurantSchema = new mongoose.Schema({
   address: {
-    city : { type: String },
-    state : { type: String },
+    city : { 
+      type: String,
+      minlength: 4,
+      maxlength: 20,
+      message :'String length should be within 4 to 20 Characters' },
+    state : {    
+      type: String,
+      minlength: 4,
+      maxlength: 20,
+      message : 'String length should be within 4 to 20 Characters' },
     coordinates : { 
-      lat : { type: Number },
-      lon : { type: Number },
+      lat : { 
+        type: Number ,
+        minlength: 2,
+        maxlength: 5,
+        message : 'Number of digits length should be within 2 to 5 Characters' },
+      lon : { 
+        type: Number,
+        minlength: 2,
+        maxlength: 5, 
+        message : 'Number of digits length should be within 2 to 5 Characters' },
     }
   },
-  cuisine: { type: String },
-  budget: { type: Number },
-  total_review:  { type: Number },
-  ratings: [Number],
-  name: {type: String},
-  restaurant_id: {type: Number},
-  menu_id: { type: Number }
-}, { collection: 'restaurant' });
+  cuisine: { 
+    type: String,
+    minlength: 4,
+    maxlength: 20,
+    message :'String length should be within 4 to 20 Characters' 
+  },
+  budget: { 
+    type: Number,
+    min: [10, 'Must be at least 10'],
+    max: 10000 
+  },
+  total_review:  { type: Number , 
+    min: [1, 'Must be at least 1'],
+    max: 1000  
+  },
+  ratings:  { 
+    type: Number,
+    min: [1, 'Must be at least 1'],
+    max: 1000  
+  },
+  name: {
+    type: String,
+    minlength: 4,
+    maxlength: 20,
+    message :'String length should be within 4 to 20 Characters' 
+  },
+  restaurant_id: {
+    type: Number,
+    unique: true,
+    min: [1, 'Must be at least 1'],
+    max: 1000000 
+  },
+  menu_id: {     
+    type: Number,
+    unique: true,
+    min: [1, 'Must be at least 1'],
+    max: 1000000 
+  }
+},
+{ collection: 'restaurant' });
 
 //minimum 3 letter title
 RestaurantSchema.path('name').validate(function (value) {
