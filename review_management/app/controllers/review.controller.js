@@ -2,8 +2,8 @@ const reviewService = require("../services/review.service")
 
 
 module.exports = {
-    getMyReviews :async (req, res) => {
-        const review = await reviewService.getMyReviews()
+    getAllReviews :async (req, res) => {
+        const review = await reviewService.getAllReviews()
         res.statusCode = 200
         res.setHeader('Content-Type','application/json')
         res.json(review)

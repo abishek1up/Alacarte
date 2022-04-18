@@ -6,6 +6,12 @@ module.exports = {
         const orders = await orderService.getOrders()
         res.json(orders)
     },
+    getOrder2 : async (req, res) => {
+        const orders = await orderService.getOrder2()
+        res.statusCode = 200
+        res.setHeader('Content-Type','application/json')
+        res.json(orders)
+    },
     getOrder : async (req, res) => {
         const orders = await orderService.getOrder(req.params.order_id)
         res.statusCode = 200
@@ -27,4 +33,6 @@ module.exports = {
             res.json(check)
         }
     }
+
+    
 }

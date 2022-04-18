@@ -57,5 +57,76 @@ module.exports = {
         res.statusCode = 200
         res.setHeader('Content-Type','application/json')
         res.json(restaurants)
+    },
+    searchRestaurantViaRatings : async (req, res) => {
+        const restaurants = await restaurantService.getRestaurant(req.params.id)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
+        res.statusCode = 200
+        res.setHeader('Content-Type','application/json')
+        res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }  
+    },
+    searchRestaurantViaDistance : async (req, res) => {
+        const restaurants = await restaurantService.getRestaurant(req.params.id)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
+        res.statusCode = 200
+        res.setHeader('Content-Type','application/json')
+        res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }  
+    },
+    searchRestaurantViaCoordinates : async (req, res) => {
+        const restaurants = await restaurantService.getRestaurant(req.params.id)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
+        res.statusCode = 200
+        res.setHeader('Content-Type','application/json')
+        res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }  
+    },
+    searchRestaurantViaCuisine : async (req, res) => {
+        const restaurants = await restaurantService.getRestaurant(req.params.id)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
+        res.statusCode = 200
+        res.setHeader('Content-Type','application/json')
+        res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }  
+    },
+    searchRestaurantViaBudget : async (req, res) => {
+        const restaurants = await restaurantService.getRestaurant(req.params.id)
+        if(restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)){
+        res.statusCode = 200
+        res.setHeader('Content-Type','application/json')
+        res.json(restaurants)
+        }
+        else
+        {
+            res.statusCode = 400
+            res.setHeader('Content-Type','application/json')
+            res.json(restaurants)
+        }  
     }
+
 }

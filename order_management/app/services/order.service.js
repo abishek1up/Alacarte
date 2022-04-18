@@ -1,7 +1,21 @@
 // Business logic
 // Database etc 
 
+
 const Order = require("../models/order")
+const connectPostgres = require("../config/orderdb");
+
+/* const Pool = require("pg").Pool
+
+const pool = new Pool({
+    user : "postgres",
+    password : "tmp",
+    database : "TestDB",
+    host: "localhost",
+    port: 5432
+})
+
+pool.connect(); */
 
 module.exports = {
     // params is object, for parameters from controllers
@@ -20,5 +34,14 @@ module.exports = {
     cancelOrder: async (Id) => {
         const orders = await Order.deleteOne({_id:Id})
         return orders
+    },
+    getOrder2: async (params) => {
+        try {
+            console.log("hey")
+            const data = await Order.query(`SELECT * FROM ordertable`);
+            return data; 
+        } catch (error) {
+            return error;
+        }
     }
 }

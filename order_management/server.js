@@ -1,10 +1,12 @@
 require("dotenv").config()
 const app = require('./app/index')
-const http=require("http");
-const connectMongo = require("./app/config/orderdb");
+const http = require("http");
+const connectPostgres = require("./app/config/orderdb");
  
+const Pool = require("pg").Pool
+
 //express application
-const server = http.createServer(app)
+ const server = http.createServer(app)
 
 // we don't node.js to listen on port during unit testing
 if (process.env.NODE_ENV !== "test"){
@@ -13,10 +15,10 @@ if (process.env.NODE_ENV !== "test"){
     console.log("IP ADDR", IP_ADDRESS, "Port ", PORT)
 
     Promise.all( [
-        connectMongo()
+        connectPostgres()
     ])
     .then ( results => {
-        console.log("Mongo db Connected")
+        console.log("Postgres db Connected")
         server.listen(PORT, IP_ADDRESS, function(err){
    
             if (err)
@@ -34,6 +36,7 @@ if (process.env.NODE_ENV !== "test"){
 }
 
 
-
 // for testing purpose
 module.exports = server
+/* 
+module.exports = pool */

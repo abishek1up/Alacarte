@@ -205,6 +205,173 @@
           }
       }
     }
+    ,
+    "/searchRestaurantViaRatings/{id}" : {
+        "get" : {
+          "summary" : "Get the restaurantData",
+          "description": "Get the restaurantData",
+          "produces": ["application/json"],
+          "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "restaurant id that needs to be viewed",
+                  "required": true,
+                  "type": "integer"
+              }
+          ],
+          "responses": {
+              "200": {
+                  "description": "successful operation",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/definitions/restaurantData"
+                      }
+                  }
+              },
+              "400": {
+                  "description": "Invalid status value",
+                  "schema": {
+                      "$ref": "#/definitions/InvalidResponse"
+                  }
+              }
+          }
+        }
+    },
+    "/searchRestaurantViaDistance/{id}" : {
+        "get" : {
+          "summary" : "Get the restaurantData",
+          "description": "Get the restaurantData",
+          "produces": ["application/json"],
+          "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "restaurant id that needs to be viewed",
+                  "required": true,
+                  "type": "integer"
+              }
+          ],
+          "responses": {
+              "200": {
+                  "description": "successful operation",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/definitions/restaurantData"
+                      }
+                  }
+              },
+              "400": {
+                  "description": "Invalid status value",
+                  "schema": {
+                      "$ref": "#/definitions/InvalidResponse"
+                  }
+              }
+          }
+        }
+    },
+    "/searchRestaurantViaCoordinates/{id}" : {
+        "get" : {
+          "summary" : "Get the restaurantData",
+          "description": "Get the restaurantData",
+          "produces": ["application/json"],
+          "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "restaurant id that needs to be viewed",
+                  "required": true,
+                  "type": "integer"
+              }
+          ],
+          "responses": {
+              "200": {
+                  "description": "successful operation",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/definitions/restaurantData"
+                      }
+                  }
+              },
+              "400": {
+                  "description": "Invalid status value",
+                  "schema": {
+                      "$ref": "#/definitions/InvalidResponse"
+                  }
+              }
+          }
+        }
+    }, 
+    "/searchRestaurantViaCuisine/{id}" : {
+        "get" : {
+          "summary" : "Get the restaurantData",
+          "description": "Get the restaurantData",
+          "produces": ["application/json"],
+          "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "restaurant id that needs to be viewed",
+                  "required": true,
+                  "type": "integer"
+              }
+          ],
+          "responses": {
+              "200": {
+                  "description": "successful operation",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/definitions/restaurantData"
+                      }
+                  }
+              },
+              "400": {
+                  "description": "Invalid status value",
+                  "schema": {
+                      "$ref": "#/definitions/InvalidResponse"
+                  }
+              }
+          }
+        }
+    },
+    "/searchRestaurantViaBudget/{id}" : {
+        "get" : {
+          "summary" : "Get the restaurantData",
+          "description": "Get the restaurantData",
+          "produces": ["application/json"],
+          "parameters": [
+              {
+                  "name": "id",
+                  "in": "path",
+                  "description": "restaurant id that needs to be viewed",
+                  "required": true,
+                  "type": "integer"
+              }
+          ],
+          "responses": {
+              "200": {
+                  "description": "successful operation",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/definitions/restaurantData"
+                      }
+                  }
+              },
+              "400": {
+                  "description": "Invalid status value",
+                  "schema": {
+                      "$ref": "#/definitions/InvalidResponse"
+                  }
+              }
+          }
+        }
+    }
+
   },
   "definitions": {
     "restaurantData": {

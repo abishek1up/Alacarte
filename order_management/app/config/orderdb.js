@@ -1,12 +1,26 @@
 
-var mongoose = require("mongoose");
+const { Module } = require("module");
+const Sequelize = require('sequelize')
+const Pool = require("pg").Pool
 
-require("../models/order");
- 
+const pool = new Pool({
+    user : "postgres",
+    password : "tmp",
+    database : "TestDB",
+    host: "localhost",
+    port: 5432
+})  
 
-module.exports = async function connectMongo() {
-    const MONGO_URL= 
-    `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_SERVER}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
+// module.exports = pool
+
+ module.exports = async function connectMongo() {  
+
+    const sequelize = new Sequelize(process.env.PG_DATABASE, process.env.PG_USER, process.env.PG_PASSWORD, {
+    host: process.env.PG_HOST,
+    dialect:process.env.PG_DIALECT,
+    operatorsAliases: false,
+  });
  
-    return await mongoose.connect(MONGO_URL);
+    return await sequelize.authenticate ();
+
 }

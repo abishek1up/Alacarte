@@ -5,7 +5,7 @@ const review = require("../models/review")
 
 module.exports = {
     // params is object, for parameters from controllers
-    getMyReviews: async () => {
+    getAllReviews: async () => {
         const reviews = await review.find().exec()
         return reviews
     },

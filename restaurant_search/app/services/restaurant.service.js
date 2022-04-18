@@ -100,5 +100,156 @@ module.exports = {
                   }
             return res;
         }
+    },
+    searchRestaurantViaRatings: async (Id,body) => {       
+        try {
+            const restaurants = await restaurant.findOne({_id:Id})
+            if(et != null){
+            return restaurants
+            }
+            else {
+                let message = "the Id is not present";
+                var res = {};
+                res.statusCode = 400
+                res.acknowledged = false
+                res.json = {
+                    success: false,
+                    message: message,
+                    }
+                return res;
+            } 
+        }
+        catch (err) {  
+            console.log(err);
+            let message = err.message;
+            var res = { "statusCode" : 200 , "json":{}};
+            res.statusCode = 400
+            res.json = {
+                success: false,
+                message: message,
+                }
+            return res;
+        }
+    },
+    searchRestaurantViaDistance: async (Id,body) => {       
+        try {
+            const restaurants = await restaurant.findOne({_id:Id})
+            if(et != null){
+            return restaurants
+            }
+            else {
+                let message = "the Id is not present";
+                var res = {};
+                res.statusCode = 400
+                res.acknowledged = false
+                res.json = {
+                    success: false,
+                    message: message,
+                    }
+                return res;
+            } 
+        }
+        catch (err) {  
+            console.log(err);
+            let message = err.message;
+            var res = { "statusCode" : 200 , "json":{}};
+            res.statusCode = 400
+            res.json = {
+                success: false,
+                message: message,
+                }
+            return res;
+        }
+    },
+    searchRestaurantViaCoordinates: async (Id,body) => {       
+        try {
+            const restaurants = await restaurant.findOne({_id:Id})
+            if(et != null){
+            return restaurants
+            }
+            else {
+                let message = "the Id is not present";
+                var res = {};
+                res.statusCode = 400
+                res.acknowledged = false
+                res.json = {
+                    success: false,
+                    message: message,
+                    }
+                return res;
+            } 
+        }
+        catch (err) {  
+            console.log(err);
+            let message = err.message;
+            var res = { "statusCode" : 200 , "json":{}};
+            res.statusCode = 400
+            res.json = {
+                success: false,
+                message: message,
+                }
+            return res;
+        }
+    },
+    searchRestaurantViaCuisine: async (Id,body) => {       
+        try {
+            const restaurants = await restaurant.findOne({_id:Id})
+            if(et != null){
+            return restaurants
+            }
+            else {
+                let message = "the Id is not present";
+                var res = {};
+                res.statusCode = 400
+                res.acknowledged = false
+                res.json = {
+                    success: false,
+                    message: message,
+                    }
+                return res;
+            } 
+        }
+        catch (err) {  
+            console.log(err);
+            let message = err.message;
+            var res = { "statusCode" : 200 , "json":{}};
+            res.statusCode = 400
+            res.json = {
+                success: false,
+                message: message,
+                }
+            return res;
+        }
+    },
+    searchRestaurantViaBudget: async (Id,body) => {       
+        try {
+            const restaurants = await restaurant.findOne({_id:Id})
+            if(et != null){
+            return restaurants
+            }
+            else {
+                let message = "the Id is not present";
+                var res = {};
+                res.statusCode = 400
+                res.acknowledged = false
+                res.json = {
+                    success: false,
+                    message: message,
+                    }
+                return res;
+            } 
+        }
+        catch (err) {  
+            console.log(err);
+            let message = err.message;
+            var res = { "statusCode" : 200 , "json":{}};
+            res.statusCode = 400
+            res.json = {
+                success: false,
+                message: message,
+                }
+            return res;
+        }
     }
+
 }
