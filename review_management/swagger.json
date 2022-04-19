@@ -2,34 +2,34 @@
   "swagger": "2.0",
   "info": {
     "version": "2.0", 
-    "title": "Restaurant",
-    "description": "Restaurant Search Service",
+    "title": "Review",
+    "description": "Review Search Service",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:8080",
-  "basePath": "/restaurants",
+  "host": "localhost:8081",
+  "basePath": "/reviews",
   "paths" : {
     "/" : {
         "get" : {
-            "summary" : "Get all the restaurants",
-            "description": "Get all the restaurants",
+            "summary" : "Get all the reviews",
+            "description": "Get all the reviews",
             "produces": ["application/json"],
             "parameters": [],
             "responses": {
                 "200": {
-                    "description": "successful operation",
+                    "description": "Successful Operation",
                     "schema": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/restaurantData"
+                            "$ref": "#/definitions/review"
                         }
                     }
                 },
                 "400": {
-                    "description": "Invalid status value",
+                    "description": "Invalid Status Value",
                     "schema": {
                         "$ref": "#/definitions/InvalidResponse"
                     }
@@ -38,8 +38,8 @@
         }
         ,
         "post" : {
-            "summary" : "Create a new Restaurant",
-            "description": "Create a new Restaurant",
+            "summary" : "Create a new Review",
+            "description": "Create a new Review",
             "produces": ["application/json"],
             "consumes": ["application/json"],
             "parameters": [
@@ -51,9 +51,9 @@
                     "schema": {
                         "type": "object",
                         "properties": {
-                            "restaurantData" : {
+                            "review" : {
                                 "type": "object",
-                                "$ref": "#/definitions/restaurantData"
+                                "$ref": "#/definitions/review"
                             } 
                         }
                     }
@@ -61,16 +61,16 @@
             ],
             "responses": {
                 "200": {
-                    "description": "successful operation",
+                    "description": "Successful Operation",
                     "schema": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/definitions/restaurantData"
+                            "$ref": "#/definitions/review"
                         }
                     }
                 },
                 "400": {
-                    "description": "Invalid status value",
+                    "description": "Invalid Status Value",
                     "schema": {
                         "$ref": "#/definitions/InvalidResponse"
                     }
@@ -79,78 +79,31 @@
         }
     },
     "/{id}" : {
-        "put" : {
-            "summary" : "Update the restaurantData",
-            "description": "Update the restaurantData",
-            "produces": ["application/json"],
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "restaurantData id that needs to be updated",
-                    "required": true,
-                    "type": "string"
-                },
-                {
-                    "in": "body",
-                    "name": "body",
-                    "description": "task object",
-                    "required": true,
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "restaurantData" : {
-                                "type": "object",
-                                "$ref": "#/definitions/restaurantData"
-                            } 
-                        }
-                    }
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/restaurantData"
-                        }
-                    }
-                },
-                "400": {
-                    "description": "Invalid status value",
-                    "schema": {
-                        "$ref": "#/definitions/InvalidResponse"
-                    }
-                }
-            }
-        }
-        ,
         "get" : {
-          "summary" : "Get the restaurantData",
-          "description": "Get the restaurantData",
+          "summary" : "Get the Review",
+          "description": "Get the Review",
           "produces": ["application/json"],
           "parameters": [
               {
                   "name": "id",
                   "in": "path",
-                  "description": "restaurant id that needs to be viewed",
+                  "description": "Review id that needs to be viewed",
                   "required": true,
                   "type": "integer"
               }
           ],
           "responses": {
               "200": {
-                  "description": "successful operation",
+                  "description": "Successful Operation",
                   "schema": {
                       "type": "array",
                       "items": {
-                          "$ref": "#/definitions/restaurantData"
+                          "$ref": "#/definitions/review"
                       }
                   }
               },
               "400": {
-                  "description": "Invalid status value",
+                  "description": "Invalid Status Value",
                   "schema": {
                       "$ref": "#/definitions/InvalidResponse"
                   }
@@ -159,14 +112,14 @@
       },
 
       "delete" : {
-        "summary" : "Delete the restaurantData",
-        "description":  "Delete the restaurantData",
+        "summary" : "Delete the Review",
+        "description":  "Delete the Review",
         "produces": ["application/json"],
         "parameters": [
             {
                 "name": "id",
                 "in": "path",
-                "description": "restaurant id that needs to be deleted",
+                "description": "Review id that needs to be deleted",
                 "required": true,
                 "type": "string"
             },
@@ -178,9 +131,9 @@
                 "schema": {
                     "type": "object",
                     "properties": {
-                        "restaurantData" : {
+                        "review" : {
                             "type": "object",
-                            "$ref": "#/definitions/restaurantData"
+                            "$ref": "#/definitions/review"
                         } 
                     }
                 }
@@ -188,7 +141,7 @@
         ],
         "responses": {
             "200": {
-                "description": "successful operation",
+                "description": "Successful Operation",
                 "schema": {
                     "type": "array",
                     "items": {
@@ -197,7 +150,7 @@
                 }
             },
             "400": {
-                "description": "Invalid status value",
+                "description": "Invalid Status Value",
                 "schema": {
                     "$ref": "#/definitions/InvalidResponse"
                 }
@@ -207,23 +160,26 @@
   }
 },
 "definitions": {
-  "restaurantData": {
-    "review_Id": { 
-        "type": "integer"
-      },
-      "restaurant_Id": { 
-        "type": "integer"
-      },
-      "customerId": { 
-        "type": "integer"
-      },
-      "rating": { 
-        "type": "integer"
-      },
-      "detail":{
-        "type": "string"  
-      }
-  },
+    "review": {
+        "type": "object",
+        "properties": {
+            "review_Id": {
+                "type": "integer"
+            },
+            "restaurant_Id": {
+                "type": "integer"
+            },
+            "customerId": {
+                "type": "integer"
+            },
+            "rating": {
+                "type": "integer"
+            },
+            "detail": {
+                "type": "string"
+            }
+        }
+    },
   "Task": {
       "type": "object",
       "properties": {

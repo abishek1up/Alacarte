@@ -9,9 +9,8 @@ restaurantRoutes.get("/:id", restaurantController.getRestaurant)
 restaurantRoutes.post("/", restaurantController.createRestaurant)
 restaurantRoutes.delete("/:id", restaurantController.deleteRestaurant)
 restaurantRoutes.put("/:id", restaurantController.updateRestaurant)
-restaurantRoutes.get("/searchRestaurantViaRatings/:id", restaurantController.searchRestaurantViaRatings)
-restaurantRoutes.get("/searchRestaurantViaDistance/:id", restaurantController.searchRestaurantViaDistance)
-restaurantRoutes.get("/searchRestaurantViaCoordinates/:id", restaurantController.searchRestaurantViaCoordinates)
-restaurantRoutes.get("/searchRestaurantViaCuisine/:id", restaurantController.searchRestaurantViaCuisine)
-restaurantRoutes.get("/searchRestaurantViaBudget/:id", restaurantController.searchRestaurantViaBudget)
+restaurantRoutes.get("/searchViaDistance/:id", restaurantController.searchViaDistance)
+restaurantRoutes.get("/searchViaCoordinates/:id", restaurantController.searchViaCoordinates)
+
+
 module.exports = restaurantRoutes

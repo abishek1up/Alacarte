@@ -12,11 +12,11 @@ module.exports = {
     getRestaurant: async (Id) => {
         try {
             const restaurants = await restaurant.findOne({_id:Id})
-            if(et != null){
+            if(restaurants != null){
             return restaurants
             }
             else {
-                let message = "the Id is not present";
+                let message = "No Restaurant matches with the Id";
                 var res = {};
                 res.statusCode = 400
                 res.acknowledged = false
@@ -45,8 +45,9 @@ module.exports = {
         console.log(restaurants)
         return restaurants
         }
-        catch (err) {  let message = err.message;
-            var res = { "statusCode" : 200 , "json":{}};
+        catch (err) { 
+            let message = err.message;
+            var res = {};
             res.statusCode = 400
             res.json = {
                 success: false,
@@ -56,10 +57,9 @@ module.exports = {
         }
     },
     deleteRestaurant: async (Id) => {
-        var et  = await restaurant.findById({_id:Id})
+        var et = await restaurant.findById({_id:Id})
         if(et != null){
         try {
-         console.log(et);
         const restaurants = await restaurant.deleteOne({_id:Id})
         return restaurants
         }
@@ -75,7 +75,7 @@ module.exports = {
          }
         }
         else {
-            let message = "the Id is not present";
+            let message = "No Restaurant matches with the Id";
             var res = { "statusCode" : 200 , "json":{}};
             res.statusCode = 400
             res.acknowledged = false
@@ -98,36 +98,6 @@ module.exports = {
                 success: false,
                 message: message,
                   }
-            return res;
-        }
-    },
-    searchRestaurantViaRatings: async (Id,body) => {       
-        try {
-            const restaurants = await restaurant.findOne({_id:Id})
-            if(et != null){
-            return restaurants
-            }
-            else {
-                let message = "the Id is not present";
-                var res = {};
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                    }
-                return res;
-            } 
-        }
-        catch (err) {  
-            console.log(err);
-            let message = err.message;
-            var res = { "statusCode" : 200 , "json":{}};
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
-                }
             return res;
         }
     },
@@ -162,66 +132,6 @@ module.exports = {
         }
     },
     searchRestaurantViaCoordinates: async (Id,body) => {       
-        try {
-            const restaurants = await restaurant.findOne({_id:Id})
-            if(et != null){
-            return restaurants
-            }
-            else {
-                let message = "the Id is not present";
-                var res = {};
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                    }
-                return res;
-            } 
-        }
-        catch (err) {  
-            console.log(err);
-            let message = err.message;
-            var res = { "statusCode" : 200 , "json":{}};
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
-                }
-            return res;
-        }
-    },
-    searchRestaurantViaCuisine: async (Id,body) => {       
-        try {
-            const restaurants = await restaurant.findOne({_id:Id})
-            if(et != null){
-            return restaurants
-            }
-            else {
-                let message = "the Id is not present";
-                var res = {};
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                    }
-                return res;
-            } 
-        }
-        catch (err) {  
-            console.log(err);
-            let message = err.message;
-            var res = { "statusCode" : 200 , "json":{}};
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
-                }
-            return res;
-        }
-    },
-    searchRestaurantViaBudget: async (Id,body) => {       
         try {
             const restaurants = await restaurant.findOne({_id:Id})
             if(et != null){

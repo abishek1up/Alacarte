@@ -6,10 +6,12 @@ const express = require('express')
 const cors = require('cors')
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require('../swagger.json');
+const app = express()
+const jwt = require("jsonwebtoken");
 
 const customerRoutes = require('./routes/customer.route')
+const userRoutes = require('./routes/user.route')
 
-const app = express()
 
 app.use(
     '/swagger',
@@ -19,7 +21,8 @@ app.use(
 
 app.use(cors())
 
-app.use("/customer",jsonParser, customerRoutes)
+app.use("/users",jsonParser, userRoutes)
+app.use("/customers",jsonParser, customerRoutes)
 
 app.get("/health", (req, res) => {
     res.send("OK")

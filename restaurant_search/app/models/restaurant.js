@@ -36,14 +36,14 @@ var RestaurantSchema = new mongoose.Schema({
     min: [10, 'Must be at least 10'],
     max: 10000 
   },
-  total_review:  { type: Number , 
+  total_reviews:  { type: Number , 
     min: [1, 'Must be at least 1'],
-    max: 1000  
+    max: 100000  
   },
   ratings:  { 
     type: Number,
     min: [1, 'Must be at least 1'],
-    max: 1000  
+    max: 5  
   },
   name: {
     type: String,
@@ -55,13 +55,13 @@ var RestaurantSchema = new mongoose.Schema({
     type: Number,
     unique: true,
     min: [1, 'Must be at least 1'],
-    max: 1000000 
+    max: 1000000000 
   },
   menu_id: {     
     type: Number,
     unique: true,
     min: [1, 'Must be at least 1'],
-    max: 1000000 
+    max: 1000000000 
   }
 },
 { collection: 'restaurant' });

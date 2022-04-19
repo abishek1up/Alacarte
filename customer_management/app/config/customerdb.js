@@ -1,6 +1,5 @@
 
 var mongoose = require("mongoose");
-
 require("../models/customer");
  
 

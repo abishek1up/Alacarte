@@ -9,7 +9,7 @@ const server = http.createServer(app)
 // we don't node.js to listen on port during unit testing
 if (process.env.NODE_ENV !== "test"){
     const IP_ADDRESS = process.env.IP_ADDRESS || "0.0.0.0"
-    const PORT = +process.env.PORT || 8080
+    const PORT = +process.env.PORT || 8082
     console.log("IP ADDR", IP_ADDRESS, "Port ", PORT)
 
     Promise.all( [
