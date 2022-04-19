@@ -1,7 +1,7 @@
 const restaurantService = require("../services/restaurant.service")
 const restaurant = require("../models/restaurant")
 
-const isAuthenticated = require("../isAuthenticated");
+//const isAuthenticated = require(".../isAuthenticated");
 
 module.exports = {
     getRestaurants : async (req, res) => {

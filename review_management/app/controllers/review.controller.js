@@ -1,9 +1,7 @@
 require("dotenv").config()
 const reviewService = require("../services/review.service")
 const review2 = require("../models/review")
-const client = require('amqplib/callback_api')
-
-var q = 'reviews';
+const rabbitClient = require("../config/reviewdb")
 
 const url = process.env.RABBIT_MQ_URL
 
@@ -17,7 +15,7 @@ const url = process.env.RABBIT_MQ_URL
     });
     return res.json(order);
 });  */
-function bail(err) {
+/* function bail(err) {
     console.error(err);
     process.exit(1);
   }
@@ -30,7 +28,7 @@ function publish_review(conn, data) {
       ch.sendToQueue(q, Buffer.from(JSON.stringify(data)));
     }
   }
-
+ */
 module.exports = {
     getAllReviews :async (req, res) => {
         const review = await reviewService.getAllReviews()
@@ -55,27 +53,23 @@ module.exports = {
     postReview : async (req, res) => {
         try{
         const review = await reviewService.postReview(req.body)
-            if(review.statusCode != 400){
-         
+            if(review.statusCode != 400){         
 
             const avgRating = await reviewService.checkAvgRating(req.body.restaurant_Id)
             var et = avgRating[0].AverageValue.toFixed(1);
 
-            client.connect(url, function(err, conn) {
+            rabbitClient.client.connect(url, function(err, conn) {
               if (err != null) bail(err);
-              console.log("connected , publishing review")
-              //TODO on review service
-              // total reviews and avg rating should be computed
-              // on every put, post, delete method calls
+              console.log("Connected, Publishing Review")
               const data = {
                   restaurant_id: req.body.restaurant_Id,
                   avg_rating: et
               }
-              publish_review(conn, data);
+              rabbitClient.publish_review(conn, data);
             });
             console.log(et);
 
-            res.status(201).json(avgRating);  
+            res.status(201).json(review);  
            }
            else
            {
