@@ -10,7 +10,7 @@ const server = http.createServer(app)
 if (process.env.NODE_ENV !== "test"){
     const IP_ADDRESS = process.env.IP_ADDRESS || "0.0.0.0"
     const PORT = +process.env.PORT || 8082
-    console.log("IP ADDR", IP_ADDRESS, "Port ", PORT)
+    console.log("IP Address:", IP_ADDRESS, ", Port:", PORT)
 
     Promise.all( [
         connectMongo()
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== "test"){
                 return;
             });
         
-            console.log("Working on port  ", PORT);
+            console.log("Working on port ", PORT);
     })
     .catch(err => {
         console.log("Failed to connect db ", err)

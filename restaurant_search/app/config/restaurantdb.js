@@ -27,10 +27,11 @@ function consumer(conn) {
         ch.consume("HOTEL", function (msg) {
             if (msg !== null) {
                 const content = msg.content.toString()
-                const data = JSON.parse(content)
-                services.updateRestaurantRating(data.restaurant_id,data.avg_rating)
-                console.log(data.restaurant_id);
-                console.log(data.avg_rating);
+                const data = JSON.parse(content)              
+                var restaurants = services.updateRestaurantRating(data.restaurant_id,data.avg_rating,data.totalRatings)
+                if(restaurants.statusCode != 400){
+                    console.log("Connected , Data Consumed")
+                }
                 ch.ack(msg);
             }
         });
@@ -42,7 +43,7 @@ function consumer(conn) {
 client
     .connect(url, function (err, conn) {
         if (err != null) bail(err);
-        console.log("Connected , Starting consumer")
+        console.log("Connected , Starting Consumer")
         consumer(conn);
     });
 

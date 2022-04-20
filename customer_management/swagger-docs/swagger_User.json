@@ -1,0 +1,195 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "2.0",
+        "title": "Customer",
+        "description": "Customer Search Service",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8082",
+    "basePath": "/",
+    "paths": {
+        "/customers": {
+                "post": {
+                    "summary": "Create a new Customer",
+                    "description": "Create a new Customer",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "consumes": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "in": "body",
+                            "name": "body",
+                            "description": "task object",
+                            "required": true,
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "customer": {
+                                        "type": "object",
+                                        "$ref": "#/definitions/customer"
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/customer"
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Invalid Status Value",
+                            "schema": {
+                                "$ref": "#/definitions/InvalidResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "/{id}": {
+                "get": {
+                    "summary": "Get one Customer Data",
+                    "description": "Get one Customer Data",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "description": "restaurant id that needs to be viewed",
+                            "required": true,
+                            "type": "string"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/customer"
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Invalid status value",
+                            "schema": {
+                                "$ref": "#/definitions/InvalidResponse"
+                            }
+                        }
+                    }
+                },
+                "delete": {
+                    "summary": "Delete a Customer Data",
+                    "description": "Delete a Customer Data",
+                    "produces": [
+                        "application/json"
+                    ],
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "description": "Customer Id that needs to be deleted",
+                            "required": true,
+                            "type": "string"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/todosResponse"
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Invalid Status Value",
+                            "schema": {
+                                "$ref": "#/definitions/InvalidResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        
+    },
+    "definitions": {
+        "customer": {
+            "type": "object",
+            "properties": {
+                "customerName": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "average_rating": {
+                    "type": "integer"
+                },
+                "review_Id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "Task": {
+            "type": "object",
+            "properties": {
+                "task": {
+                    "type": "string"
+                },
+                "assignee": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "InvalidResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
+}

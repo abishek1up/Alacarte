@@ -1,41 +1,34 @@
 var mongoose = require('mongoose');
 
 var CustomerSchema = new mongoose.Schema({
-  customerName: { type: String ,
+  customerName: {
+    type: String,
     minlength: 4,
-    maxlength: 200,
-    message :'String length should be within 4 to 20 Characters',
+    maxlength: 30,
+    message: 'String length should be within 4 to 20 Characters',
     unique: true,
   },
-  customerId: { 
+  customerId: {
     type: Number,
-    min: [10, 'Must be at least 10'],
+    min: [1000, 'Must be at least 10'],
     max: 1000000000,
     unique: true,
   },
   location: {
-    city : { 
+    city: {
       type: String,
       minlength: 4,
       maxlength: 20,
-      message :'String length should be within 4 to 20 Characters' },
-    state : {    
+      message: 'City length should be within 4 to 20 Characters'
+    },
+    state: {
       type: String,
       minlength: 4,
       maxlength: 20,
-      message : 'String length should be within 4 to 20 Characters' },
-  },
-  average_rating :  {type: Number},
-  review_Id: { 
-    type: Number,
-    min: [10, 'Must be at least 10'],
-    max: 1000000000,
-    unique: true,
-  },
+      message: 'State length should be within 4 to 20 Characters'
+    },
+  }
 }, { collection: 'customer' });
-
-
-
 
 mongoose.model('Customers', CustomerSchema)
 

@@ -3,6 +3,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
+const axios = require('axios')
+const redis = require('redis')
+
+const responseTime = require('response-time')
+const { promisify } = require('util')
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require('../swagger.json');
@@ -12,7 +17,12 @@ const restaurantRoutes = require('./routes/restaurant.route')
 
 const app = express()
 
+app.use(responseTime())
 
+const client = redis.createClient({
+  host: '127.0.0.1',
+  port: 6379,
+})
 
 let port = 8080
 //callback in case of error

@@ -5,6 +5,7 @@ const restaurantController = require("../controllers/restaurant.controller");
 
 // /orders is prefix from app/index.js 
 restaurantRoutes.get("/", restaurantController.getRestaurants)
+restaurantRoutes.get("/cache/", restaurantController.cacheDB)
 restaurantRoutes.get("/:id", restaurantController.getRestaurant)
 restaurantRoutes.post("/", restaurantController.createRestaurant)
 restaurantRoutes.delete("/:id", restaurantController.deleteRestaurant)

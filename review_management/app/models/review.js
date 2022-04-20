@@ -26,7 +26,7 @@ var ReviewSchema = new mongoose.Schema({
     min: [1, 'Must be at least 1'],
     max: 5 
   },
-  detail:{
+  review:{
     type: String,
   minlength: 4,
   maxlength: 200,

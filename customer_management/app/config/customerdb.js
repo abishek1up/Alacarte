@@ -1,6 +1,5 @@
 
 var mongoose = require("mongoose");
-require("../models/customer");
  
 
 module.exports = async function connectMongo() {

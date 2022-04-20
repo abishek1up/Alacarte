@@ -101,9 +101,9 @@ module.exports = {
             return res;
         }
     },
-    updateRestaurantRating: async (Id,avgRating) => {       
+    updateRestaurantRating: async (Id,avgRating,totalRatings) => {       
         try {
-        const restaurants = await restaurant.updateOne({restaurant_id:Id}, { $set:{ rating:avgRating } }, { new: true })  
+        const restaurants = await restaurant.updateOne({restaurant_id:Id}, { $set:{ ratings:avgRating, total_reviews:totalRatings } }, { new: true })  
         return restaurants
         }
         catch (err) {  let message = err.message;
@@ -175,6 +175,10 @@ module.exports = {
                 }
             return res;
         }
+    },
+    cacheDB: async () => {
+        const restaurants = await restaurant.find().exec()
+        return restaurants
     }
 
 }

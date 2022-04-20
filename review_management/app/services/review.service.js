@@ -105,6 +105,21 @@ module.exports = {
     checkAvgRating: async (Id) => {
         const avgRating = await review.aggregate([{ $match: { "restaurant_Id": Id } }, { "$group": { "_id": null, AverageValue: { $avg: "$rating" } } }]);
         return avgRating
+    },
+    checktotalRatings: async (Id) => {
+        const totalRatings = await review.aggregate(
+            [
+              {
+                $match: 
+                    { "restaurant_Id": Id }
+                }
+              ,
+              {
+                $count: "TotalRatings"
+              }
+            ]
+          )
+        return totalRatings
     }
 }
 
