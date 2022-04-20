@@ -101,6 +101,21 @@ module.exports = {
             return res;
         }
     },
+    updateRestaurantRating: async (Id,avgRating) => {       
+        try {
+        const restaurants = await restaurant.updateOne({restaurant_id:Id}, { $set:{ rating:avgRating } }, { new: true })  
+        return restaurants
+        }
+        catch (err) {  let message = err.message;
+            var res = { "statusCode" : 200 , "json":{}};
+            res.statusCode = 400
+            res.json = {
+                success: false,
+                message: message,
+                  }
+            return res;
+        }
+    },
     searchRestaurantViaDistance: async (Id,body) => {       
         try {
             const restaurants = await restaurant.findOne({_id:Id})

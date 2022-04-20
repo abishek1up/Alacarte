@@ -1,7 +1,7 @@
 require("dotenv").config()
 const app = require('./app/index')
 const http=require("http");
-const connectMongo = require("./app/config/restaurantdb");
+const restaurantdb = require("./app/config/restaurantdb");
 
 //express application
 const server = http.createServer(app)
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== "test"){
     console.log("IP ADDR", IP_ADDRESS, "Port ", PORT)
 
     Promise.all( [
-        connectMongo()
+        restaurantdb.connectMongo()
     ])
     .then ( results => {
         console.log("Mongo db Connected")

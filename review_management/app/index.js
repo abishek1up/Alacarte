@@ -4,8 +4,6 @@ const jsonParser = bodyParser.json()
 const express = require('express')
 const cors = require('cors')
 
-const amqp = require("amqplib");
-
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require('../swagger.json');
 
@@ -13,7 +11,6 @@ const reviewRoutes = require('./routes/review.route')
 
 const app = express()
 
-var channel, connection;
 
 app.use(
     '/swagger',

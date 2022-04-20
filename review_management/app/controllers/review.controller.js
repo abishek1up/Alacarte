@@ -5,30 +5,6 @@ const rabbitClient = require("../config/reviewdb")
 
 const url = process.env.RABBIT_MQ_URL
 
-
-/* app.post("/product/buy", isAuthenticated, async (req, res) => {
-    const { ids } = req.body;
-    const products = await Product.find({ _id: { $in: ids } });
-   
-    channel.consume("PRODUCT", (data) => {
-        order = JSON.parse(data.content);
-    });
-    return res.json(order);
-});  */
-/* function bail(err) {
-    console.error(err);
-    process.exit(1);
-  }
-
-function publish_review(conn, data) {
-    conn.createChannel(on_open);
-    function on_open(err, ch) {
-      if (err != null) bail(err);
-      ch.assertQueue(q);
-      ch.sendToQueue(q, Buffer.from(JSON.stringify(data)));
-    }
-  }
- */
 module.exports = {
     getAllReviews :async (req, res) => {
         const review = await reviewService.getAllReviews()
