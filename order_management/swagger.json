@@ -1,279 +1,203 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "2.0", 
-    "title": "Restaurant",
-    "description": "Restaurant Search Service",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    }
-  },
-  "host": "localhost:8080",
-  "basePath": "/restaurants",
-  "paths" : {
-    "/" : {
-        "get" : {
-            "summary" : "Get all the restaurants",
-            "description": "Get all the restaurants",
-            "produces": ["application/json"],
-            "parameters": [],
-            "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/restaurantData"
+    "swagger": "2.0",
+    "info": {
+        "version": "2.0",
+        "title": "Order Management Service",
+        "description": "Order Management Service",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/order",
+    "paths": {
+        "/{customerId}/{restaurant_Id}": {
+            "post": {
+                "summary": "Place a new Order",
+                "description": "Place a new Order",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "customerId",
+                        "in": "path",
+                        "description": "customerId that needs to be updated",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "restaurant_Id",
+                        "in": "path",
+                        "description": "restaurant_Id that needs to be updated",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "task object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "restaurantData": {
+                                    "type": "object",
+                                    "$ref": "#/definitions/Order"
+                                }
+                            }
                         }
                     }
-                },
-                "400": {
-                    "description": "Invalid status value",
-                    "schema": {
-                        "$ref": "#/definitions/InvalidResponse"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
                     }
                 }
             }
-        }
-        ,
-        "post" : {
-            "summary" : "Create a new Restaurant",
-            "description": "Create a new Restaurant",
-            "produces": ["application/json"],
-            "consumes": ["application/json"],
-            "parameters": [
-                {
-                    "in": "body",
-                    "name": "body",
-                    "description": "task object",
-                    "required": true,
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "restaurantData" : {
-                                "type": "object",
-                                "$ref": "#/definitions/restaurantData"
-                            } 
+        },
+        "/{order_Id}": {            
+            "get": {
+                "summary": "Get the Order Details",
+                "description": "Get the Order Details",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "order_Id",
+                        "in": "path",
+                        "description": "order_Id that needs to be viewed",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Order"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
                         }
                     }
                 }
-            ],
-            "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/restaurantData"
-                        }
+            },
+            "delete": {
+                "summary": "Cacnel the Order",
+                "description": "Cacnel the Order",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "order_Id",
+                        "in": "path",
+                        "description": "order_Id that needs to be canceled",
+                        "required": true,
+                        "type": "integer"
                     }
-                },
-                "400": {
-                    "description": "Invalid status value",
-                    "schema": {
-                        "$ref": "#/definitions/InvalidResponse"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
                     }
                 }
             }
         }
     },
-    "/{id}" : {
-        "put" : {
-            "summary" : "Update the restaurantData",
-            "description": "Update the restaurantData",
-            "produces": ["application/json"],
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "description": "restaurantData id that needs to be updated",
-                    "required": true,
-                    "type": "string"
+    "definitions": {
+        "Order": {
+            "type": "object",
+            "properties": {
+                "order_Id": {
+                    "type": "array"
                 },
-                {
-                    "in": "body",
-                    "name": "body",
-                    "description": "task object",
-                    "required": true,
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "restaurantData" : {
-                                "type": "object",
-                                "$ref": "#/definitions/restaurantData"
-                            } 
-                        }
-                    }
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "successful operation",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/restaurantData"
-                        }
-                    }
-                },
-                "400": {
-                    "description": "Invalid status value",
-                    "schema": {
-                        "$ref": "#/definitions/InvalidResponse"
-                    }
-                }
-            }
-        }
-        ,
-        "get" : {
-          "summary" : "Get the restaurantData",
-          "description": "Get the restaurantData",
-          "produces": ["application/json"],
-          "parameters": [
-              {
-                  "name": "id",
-                  "in": "path",
-                  "description": "restaurant id that needs to be viewed",
-                  "required": true,
-                  "type": "integer"
-              }
-          ],
-          "responses": {
-              "200": {
-                  "description": "successful operation",
-                  "schema": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/definitions/restaurantData"
-                      }
-                  }
-              },
-              "400": {
-                  "description": "Invalid status value",
-                  "schema": {
-                      "$ref": "#/definitions/InvalidResponse"
-                  }
-              }
-          }
-      },
-
-      "delete" : {
-        "summary" : "Delete the restaurantData",
-        "description":  "Delete the restaurantData",
-        "produces": ["application/json"],
-        "parameters": [
-            {
-                "name": "id",
-                "in": "path",
-                "description": "restaurant id that needs to be deleted",
-                "required": true,
-                "type": "string"
-            },
-            {
-                "in": "body",
-                "name": "body",
-                "description": "task object",
-                "required": true,
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "restaurantData" : {
-                            "type": "object",
-                            "$ref": "#/definitions/restaurantData"
-                        } 
-                    }
-                }
-            }
-        ],
-        "responses": {
-            "200": {
-                "description": "successful operation",
-                "schema": {
+                "OrderItems": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/todosResponse"
+                        "type": "string"
                     }
+                },
+                "total_amount": {
+                    "type": "integer"
+                },
+                "restaurant_Id": {
+                    "type": "integer"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "review_Id": {
+                    "type": "integer"
                 }
-            },
-            "400": {
-                "description": "Invalid status value",
-                "schema": {
-                    "$ref": "#/definitions/InvalidResponse"
+            }
+        },
+        "InvalidResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         }
-    }
-  }
-},
-"definitions": {
-  "restaurantData": {
-      "type": "object",
-      "properties": {
-        "address" : { 
-          "type": "object",
-          "properties": {
-          "city" : { "type" : "string"},
-          "state" :  { "type" : "string"},
-          "coordinates" : {  
-            "type": "object", 
-            "properties": { 
-            "lat" : { "type": "integer" },
-            "lon" : { "type": "integer" }
-            }
-          }
-        }
-        },
-        "cuisine": { 
-          "type": "string"
-        },
-        "budget": { 
-          "type": "integer"
-        },
-        "total_review":  { "type": "integer" 
-        },
-        "ratings":  { 
-          "type": "integer"
-        },
-        "name": {
-          "type":"string"
-        },
-        "restaurant_id": {
-          "type": "integer"
-        },
-        "menu_id": {     
-          "type": "integer"
-        }
-      }
-  },
-  "Task": {
-      "type": "object",
-      "properties": {
-          "task": {
-              "type": "string"
-          },
-          "assignee": {
-              "type": "string"
-          },
-          "status": {
-              "type": "string"
-          }
-      }
-  },
-  "InvalidResponse": {
-      "type": "object",
-      "properties": {
-          "statusCode": {
-              "type": "string"
-          },
-          "message": {
-              "type": "string"
-          }
-      }
-
-  }
-},
-  "schemes": ["http"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"]
+    },
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
 }

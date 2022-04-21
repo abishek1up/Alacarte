@@ -12,7 +12,7 @@ module.exports = {
             const user = await User.findOne({ email });
             var tokenT = "";
             if (!user) {
-                return { Status: "Fail", StatusCode: 404, message: "User doesn't exist" };
+                return { Status: "Fail", StatusCode: 404, message: "User doesn't exist. Please register." };
             }
             else if (password !== user.password) {
                 return { Status: "Fail", StatusCode: 401, message: "Unauthorized : Password Incorrect" };
@@ -32,20 +32,39 @@ module.exports = {
     },
     registerUser: async (body) => {
         if (Object.keys(body).length !== 0) {
-            const { email, password, name } = body;
+            const { email, password, customerName, location: { city, state } } = body;
             const userExists = await User.findOne({ email });
+
             if (userExists) {
                 return { Status: "Fail", StatusCode: 400, Message: "User Email ID already exists" };
             }
             else {
-                const newUser = new User({
-                    email,
-                    name,
-                    password,
-                });
-                newUser.save();
-                return { Status: "ERROR", StatusCode: 201, Message: "User Registered Successfully." };
+                var users = await User.create({ email: body.email, password: body.password })
+                    .then(function (newUser) {
+                        console.log(newUser);                       
+                        return { Status: "SUCCESS", StatusCode: 201, Message: "New User Registered", customerId : newUser.customerId };
+                    })
+                    .catch(function (err) {
+                        console.log("check", err.name)
+                        if (err.name == 'ValidationError') {
+                            console.log("check", err.name)
+                            return { Status: "ERROR", StatusCode: 422, Message: err.message }
+                        } else {
+                            return { Status: "ERROR", StatusCode: 500, Message: err.message }
+                        }
+                    })
+                return users;
             }
+        }
+        else {
+            return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
+        }
+    },
+    registerCustomer: async (body,newUser) => {
+        if (Object.keys(body).length !== 0) {
+
+            var et = await Customer.create({ customerName: body.customerName, customerId: newUser.customerId, location: { city: body.location.city, state: body.location.state } })
+            return { Status: "SUCCESS", StatusCode: 201, Message: "New Customer Registered" };
         }
         else {
             return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
@@ -65,13 +84,14 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    updateCustomerDetail: async (customerId) => {
+    updateCustomerDetail: async (customerId,body) => {
         if (Object.keys(body).length !== 0) {
             var check = await Customer.findOne({ customerId: customerId })
             if (check != null) {
                 try {
-                    const customers = await Customer.updateOne({ customerId: customerId }, { $set: body }, { new: true })
-                    return customers
+                    const customers = await Customer.updateOne({ customerId: customerId }, { $set: { location: body.location, customerName: body.customerName } }, { new: true })
+                    const customers2 = await Customer.findOne({ customerId: customerId })
+                    return customers2
 
                 }
                 catch (err) {
@@ -93,7 +113,7 @@ module.exports = {
 
                 const customers = await Customer.deleteOne({ customerId: customerId })
                 const users = await User.deleteOne({ customerId: customerId })
-                return customers,users
+                return { Status: "SUCCESS", StatusCode: 200, Message: "USER Deactivated" }
             }
             else {
                 return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID" };

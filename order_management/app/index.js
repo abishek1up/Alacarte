@@ -21,11 +21,8 @@ app.use(
     swaggerUi.setup(swaggerDocument)
   );
 
-  app.listen(8080, ()=>{
-          console.log("Server is running at 8080");
-  });
 app.use(cors())
-app.use("/orders",jsonParser, orderRoutes)
+app.use("/order",jsonParser, orderRoutes)
 
 app.get("/health", (req, res) => {
     res.send("OK")

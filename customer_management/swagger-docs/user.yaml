@@ -1,5 +1,5 @@
 paths:
-  /users/login:           # path of the user from your endpoint
+  /user/login:           # path of the user from your endpoint
     post:                 # endpoint request type (post request)
       tags:               # Tag property
         - User            # Value of the tag
@@ -9,10 +9,10 @@ paths:
       parameters:         # request parameters
       - in: body          # request body
         name: login     # name of request, can be any name
-        description: It enables a user to create an account
+        description: It enables a user to login
         required: false   # can also be true depending on user preference
         schema:           # Schema definition
-          $ref: '#/definitions/User' 
+          $ref: '#/definitions/UserLogin' 
       responses:          # server responses
         200:
           description: An object with user details
@@ -21,7 +21,7 @@ paths:
         404:
           $ref: '#/definitions/responses/NotFound'   
 
-  /users/register:       # path of the user from your endpoint
+  /user/register:       # path of the user from your endpoint
     post:                 # endpoint request type (post request)
       tags:               # Tag property
         - User            # Value of the tag
@@ -34,21 +34,32 @@ paths:
         description: It enables a user to create an account
         required: false   # can also be true depending on user preference
         schema:           # Schema definition
-          $ref: '#/definitions/User' 
+          $ref: '#/definitions/UserRegister' 
       responses:          # server responses
         201:
           description: An object with user details
 
 definitions:        # Schema defination for request body
-  User:
+  UserRegister:
     type: object
     properties:
-      user:
+      customerName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      location:
         type: object
         properties:
-          username:
+          city:
             type: string
-          email:
+          state:
             type: string
-          password:
-            type: string
+  UserLogin:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string

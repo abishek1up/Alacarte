@@ -25,6 +25,7 @@
     "sinon": "^13.0.1",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.3.0",
+    "validator": "^13.7.0",
     "yamljs": "^0.3.0"
   }
 }

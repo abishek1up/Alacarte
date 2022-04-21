@@ -6,7 +6,6 @@ var CustomerSchema = new mongoose.Schema({
     minlength: 4,
     maxlength: 30,
     message: 'String length should be within 4 to 20 Characters',
-    unique: true,
   },
   customerId: {
     type: Number,

@@ -83,7 +83,7 @@ module.exports = {
     },
     getRestaurant: async (req, res) => {
         const restaurants = await restaurantService.getRestaurant(req.params.id)
-        if (restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)) {
+        if (restaurants != null ) {
             res.statusCode = 200
             res.setHeader('Content-Type', 'application/json')
             res.json(restaurants)

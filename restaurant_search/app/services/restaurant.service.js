@@ -13,9 +13,11 @@ module.exports = {
         try {
             const restaurants = await restaurant.findOne({_id:Id})
             if(restaurants != null){
+            console.log("check1")
             return restaurants
             }
             else {
+                console.log("check1")
                 let message = "No Restaurant matches with the Id";
                 var res = {};
                 res.statusCode = 400
@@ -28,6 +30,7 @@ module.exports = {
             } 
         }
         catch (err) {  
+            console.log("check1")
             console.log(err);
             let message = err.message;
             var res = { "statusCode" : 200 , "json":{}};
