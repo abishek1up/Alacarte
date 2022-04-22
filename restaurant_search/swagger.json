@@ -58,7 +58,7 @@
                             "properties": {
                                 "restaurant": {
                                     "type": "object",
-                                    "$ref": "#/definitions/restaurant"
+                                    "$ref": "#/definitions/createRestaurant"
                                 }
                             }
                         }
@@ -92,7 +92,7 @@
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "restaurant_id",
                         "in": "path",
                         "description": "restaurant id that needs to be viewed",
                         "required": true,
@@ -328,9 +328,84 @@
                 },
                 "restaurant_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "updateRestaurant": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string"
+                        },
+                        "coordinates": {
+                            "type": "object",
+                            "properties": {
+                                "lat": {
+                                    "type": "integer"
+                                },
+                                "lon": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
                 },
-                "menu_id": {
+                "cuisine": {
+                    "type": "string"
+                },
+                "budget": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "createRestaurant": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string"
+                        },
+                        "coordinates": {
+                            "type": "object",
+                            "properties": {
+                                "lat": {
+                                    "type": "integer"
+                                },
+                                "lon": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "cuisine": {
+                    "type": "string"
+                },
+                "budget": {
+                    "type": "integer"
+                },                
+                "total_review": {
+                    "type": "integer"
+                },
+                "ratings": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },

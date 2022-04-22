@@ -4,86 +4,57 @@
 const review = require("../models/review")
 
 module.exports = {
-    // params is object, for parameters from controllers
     getAllReviews: async () => {
-        const reviews = await review.find().exec()
-        return reviews
-    },
-    getReview: async (Id) => {
         try {
-            const reviews = await review.findOne({ _id: Id })
+            const reviews = await review.find().exec()
             if (reviews != null) {
                 return reviews
             }
             else {
-                let message = "No Review matches with the Id";
-                var res = {};
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                }
-                return res;
+                return { Status: "ERROR", StatusCode: 400, Message: "No Reviews are present" };
             }
         }
         catch (err) {
-            console.log(err);
-            let message = err.message;
-            var res = { "statusCode": 200, "json": {} };
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
+            return { Status: "ERROR", StatusCode: 400, Message: err.message };
+        }
+    },
+    getReview: async (review_Id) => {
+        try {
+            const reviews = await review.findOne({ review_Id: review_Id })
+            if (reviews != null) {
+                return reviews
             }
-            return res;
+            else {
+                return { Status: "ERROR", StatusCode: 400, Message: "No Reviews matching this Restaurant Id" };
+            }
+        }
+        catch (err) {
+            return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
     postReview: async (body) => {
-        try {
-            const reviews = await review.create(body)
-            return reviews
+        if (Object.keys(body).length !== 0) {
+            var reviews = await review.create(body);
+             return { Status: "SUCCESS", StatusCode: 201, Message: "New review created" };
         }
-        catch (err) {
-            let message = err.message;
-            var res = {};
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
-            }
-            return res;
+        else { 
+            return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
         }
     },
-    deleteReview: async (Id) => {
-        var et = await review.findById({ _id: Id })
-        if (et != null) {
-            try {
-                const reviews = await review.deleteOne({ _id: Id })
-                return reviews
+    deleteReview: async (order_Id) => {
+        try {
+            var check = await order.findOne({order_Id:order_Id})
+            if (check != null) {
+
+                const reviews = await review.deleteOne({restaurant_id:restaurant_id})
+                return { Status: "SUCCESS", StatusCode: 200, Message: "review Deleted", acknowledged : Restaurants.acknowledged }
             }
-            catch (err) {
-                let message = err.message;
-                var res = { "statusCode": 200, "json": {} };
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                }
-                return res;
+            else {
+                return { Status: "ERROR", StatusCode: 400, Message: "No Restaurant matching this Customer ID" };
             }
         }
-        else {
-            let message = "No Review matches with the Id";
-            var res = { "statusCode": 200, "json": {} };
-            res.statusCode = 400
-            res.acknowledged = false
-            res.json = {
-                success: false,
-                message: message,
-            }
-            return res;
+        catch (err) {
+            return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
     updateReview: async (Id, body) => {
@@ -100,6 +71,24 @@ module.exports = {
                 message: message,
             }
             return res;
+        }
+    },
+    checkOrderValid: async (order_Id) => {
+        try {
+             var checkOrder = await axios.get("http://localhost:8083/order/" + order_Id)
+              .then(function (response) {
+                return response.status;
+              })
+              .catch(function (error) {
+                return response.status;
+              }) 
+
+            if (checkOrder == 200) {
+                return { Status: "SUCCESS", StatusCode: 200 , acknowledged : true};
+            } 
+        }
+        catch (err) {
+            return { Status: "ERROR", StatusCode: 400, Message:  err.message };
         }
     },
     checkAvgRating: async (Id) => {

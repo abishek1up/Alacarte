@@ -75,100 +75,73 @@ async function delCache(key) {
 //const isAuthenticated = require(".../isAuthenticated");
 
 module.exports = {
-    getRestaurants: async (req, res) => {
-        const restaurants = await restaurantService.getRestaurants()
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.json(restaurants)
+    getALLRestaurants: async (req, res) => {
+        const restaurants = await restaurantService.getALLRestaurants()
+        if(restaurants.StatusCode == null)
+        return res.status(200).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
     },
-    getRestaurant: async (req, res) => {
-        const restaurants = await restaurantService.getRestaurant(req.params.id)
-        if (restaurants != null ) {
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
-        }
-        else {
-            res.statusCode = 400
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
-        }
+    getRestaurantByID: async (req, res) => {
+        const restaurants = await restaurantService.getRestaurantByID(req.params.restaurant_id)
+        if(restaurants.StatusCode == null)
+        return res.status(200).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
     },
     createRestaurant: async (req, res) => {
-        try {
-            const restaurants = await restaurantService.createRestaurant(req.body)
-            if (restaurants.statusCode != 400) {
-                res.status(201).json(restaurants);
-            }
-            else {
-                res.status(400).json(restaurants);
-            }
-        }
-        catch (e) {
-            if (!e.status) {
-                res.status(500).json({ error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-            } else {
-                res.status(e.status).json({ error: { code: e.code, message: e.message } });
-            }
-        }
+        var restaurants = await restaurantService.createRestaurant(req.body);
+        if(restaurants.StatusCode == 201)
+        return res.status(201).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
     },
-    deleteRestaurant: async (req, res) => {
-        const check = await restaurantService.deleteRestaurant(req.params.id)
+    deleteRestaurantByID: async (req, res) => {
+        const check = await restaurantService.deleteRestaurantByID(req.params.restaurant_id)
         if (check.acknowledged) {
-            const restaurants = await restaurantService.getRestaurants()
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
+            return res.status(200).json(check);
         }
         else {
-            res.statusCode = 400
-            res.setHeader('Content-Type', 'application/json')
-            res.json(check)
+            return res.status(check.StatusCode).json(check);
         }
     },
-    updateRestaurant: async (req, res) => {
-        try {
-            const restaurants = await restaurantService.updateRestaurant(req.params.id, req.body)
-            if (restaurants.statusCode != 400) {
-                res.status(201).json(restaurants);
+    updateRestaurantDetailsByID: async (req, res) => {
+            const restaurants = await restaurantService.updateRestaurantDetailsByID(req.params.restaurant_id, req.body)
+            if (restaurants.StatusCode == null) {
+                return res.status(200).json(restaurants);
             }
             else {
-                res.status(400).json(restaurants);
+                return res.status(restaurants.StatusCode).json(restaurants);
             }
-        }
-        catch (e) {
-            if (!e.status) {
-                res.status(500).json({ error: { code: 'UNKNOWN_ERROR', message: 'An unknown error occurred.' } });
-            } else {
-                res.status(e.status).json({ error: { code: e.code, message: e.message } });
-            }
-        }
+    },  
+      
+    searchViaKeyword: async (req, res) => {
+        const restaurants = await restaurantService.searchViaKeyword(req.params.keyword)
+        if(restaurants.StatusCode == null)
+        return res.status(200).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
+    },
+    searchViaBudget: async (req, res) => {
+        const restaurants = await restaurantService.searchViaBudget(req.params.budget)
+        if(restaurants.StatusCode == null)
+        return res.status(200).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
     },
     searchViaDistance: async (req, res) => {
         const restaurants = await restaurantService.searchViaDistance(req.params.id)
-        if (restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)) {
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
-        }
-        else {
-            res.statusCode = 400
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
-        }
+        if(restaurants.StatusCode == null)
+        return res.status(200).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
     },
     searchViaCoordinates: async (req, res) => {
         const restaurants = await restaurantService.searchViaCoordinates(req.params.id)
-        if (restaurants.statusCode == 200 && (res.statusCode >= 200 && res.statusCode < 400)) {
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
-        }
-        else {
-            res.statusCode = 400
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants)
-        }
+        if(restaurants.StatusCode == null)
+        return res.status(200).json(restaurants);
+        else
+        res.status(restaurants.StatusCode).json(restaurants);
     },
     cacheDB: async (req, res) => {
         try {
@@ -190,6 +163,39 @@ module.exports = {
         } catch (error) {
             res.json(error.message)
         }
-    }
+    },
+
+    getRestaurantMenu: async (req, res) => {
+        const menus = await restaurantService.getRestaurantMenu(req.params.restaurant_id)
+        if(menus.StatusCode == null)
+        return res.status(200).json(menus);
+        else
+        res.status(menus.StatusCode).json(menus);
+    },
+    createRestaurantMenu: async (req, res) => {
+        const menus = await restaurantService.createRestaurantMenu(req.body,req.params.restaurant_id)
+        if(menus.StatusCode == 201)
+        return res.status(201).json(menus);
+        else
+        res.status(menus.StatusCode).json(menus);
+    },
+    updateRestaurantMenu: async (req, res,) => {
+        const menus = await restaurantService.updateRestaurantMenu(req.params.menu_id,req.body)
+        if (menus.StatusCode == null) {
+            return res.status(200).json(menus);
+        }
+        else {
+            return res.status(restaurants.StatusCode).json(menus);
+        }
+    },
+    deleteRestaurantMenu: async (req, res) => {
+        const check = await restaurantService.deleteRestaurantMenu(req.params.menu_id)
+        if (check.acknowledged) {
+            return res.status(200).json(check);
+        }
+        else {
+            return res.status(check.StatusCode).json(check);
+        }
+    },
 
 }

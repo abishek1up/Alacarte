@@ -20,12 +20,12 @@ module.exports = {
         } 
     },
     cancelOrder : async (req, res) => {
-        const check = await orderService.cancelOrder(req.params.customerId)
+        const check = await orderService.cancelOrder(req.params.order_Id)
         if (check.acknowledged) {
-            return res.status(200).json(check);
+            return res.json(check);
         }
         else {
-            return res.status(check.StatusCode).json(check);
+            return res.json(check);
         }
     }
     

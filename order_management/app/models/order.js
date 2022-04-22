@@ -8,7 +8,8 @@ var OrderSchema = new mongoose.Schema({
   order_Id: {
     type: Number,
     min: [10, 'Must be at least 10'],
-    max: 10000
+    max: 10000,
+    unique: true
   },
   // items: [String],
   OrderItems: [{
@@ -29,7 +30,6 @@ var OrderSchema = new mongoose.Schema({
     type: Number,
     min: [1000, 'Must be at least 10'],
     max: 1000000000,
-    unique: true,
   },
   created_at: {
     type: Date,

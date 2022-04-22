@@ -20,11 +20,13 @@
     "express": "^4.17.3",
     "mocha": "^9.2.2",
     "mongoose": "^6.2.10",
+    "mongoose-auto-increment": "^5.0.1",
     "nodemon": "^2.0.15",
     "redis": "^4.0.6",
     "response-time": "^2.3.2",
     "sinon": "^13.0.1",
     "swagger-ui-express": "^4.3.0",
+    "validator": "^13.7.0",
     "yamljs": "^0.3.0"
   }
 }

@@ -36,12 +36,11 @@ module.exports = {
         try {
             var check = await Order.findOne({ order_Id: order_Id })
             if (check != null) {
-
-                const Order = await Order.deleteOne({ order_Id: order_Id })
-                return { Status: "SUCCESS", StatusCode: 200, Message: "Order Cancelled" }
+                const orders = await Order.deleteOne({ order_Id: order_Id })
+                return { Status: "SUCCESS", StatusCode: 200, acknowledged: orders.acknowledged }
             }
             else {
-                return { Status: "ERROR", StatusCode: 400, Message: "No Order matching this Order ID" };
+                return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID" };
             }
         }
         catch (err) {
@@ -60,7 +59,6 @@ module.exports = {
 
             var checkRestaurant = await axios.get("http://localhost:8080/restaurants/"+id )
               .then(async function (response) {
-                console.log("check1");
                 return response.status;
                 })
                 .catch(async function (error) {
