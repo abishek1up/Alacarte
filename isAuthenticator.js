@@ -1,22 +1,16 @@
-const express = require("express");
 const jsonServer = require('json-server')
 //const jwt = require('jwt-simple');
 const jwt = require('jsonwebtoken');
-const ejs = require("ejs");
-const path = require("path");
 const bodyParser = require('body-parser')
 const moment = require('moment');
-
+require("dotenv").config()
+const logger = require('./winston')
 const app = jsonServer.create()
-
-var expiryInMinutes = 1;
-
-app.set('jwtTokenSecret', 'yX!fglBbZr');
 
 app.use(bodyParser.json());
 
 app.get("/validate/token", validateToken, (req, res) => {
-    res.json({valid: true})
+    res.json({ valid: true })
 })
 app.post('/oauth/token', authInitialize);
 
@@ -25,52 +19,48 @@ app.get("/health", (req, res) => {
 })
 
 function validateToken(req, res) {
-    console.log("Validating token");
-    
+    logger.info("Validating token");
+
     var token = req.headers["x-auth-token"];
     if (!token) {
         if (req.headers["authorization"]) {
-            token = req.headers["authorization"].split(" ")[1];
+            logger.error("check1");
+            token = req.headers["authorization"].split(" ")[1].trim();
+            logger.error(token);
         }
-    }
-    if(!token) {
-        console.error("token not present");
-        return res.status(403).json({error: 'token not present'})
     }
     try {
-        var decoded = jwt.decode(token, app.get('jwtTokenSecret'));
-        console.log(decoded)
-        console.log(Date.now())
-        console.log(decoded.exp)
-        if (Date.now() >= decoded.exp) {
-            console.error("expired token");
-             return res.status(400).json({error: 'expired token'});
+        var decoded = jwt.decode(token, process.env.JWTSECRET);
+        logger.info(decoded)
+        if (decoded.exp < (new Date().getTime() + 1) / 1000) {
+            logger.error("Token Expired");
+            return res.status(403).json({ error: 'Token Expired' });
         }
-        var result = jwt.verify(token, "secret", (err, user) => {    
-          if (err) return res.status(403)  
-          else if(user) return res.status(200)  
+        var result = jwt.verify(token, process.env.JWTSECRET, (err, user) => {
+            if (err) return res.status(403)
+            else if (user) return res.status(200)
         })
 
-    }catch(ex) {
-        console.error(ex.message)
-        res.status(400).json({error: ex.message});
+    } catch (ex) {
+        logger.error(ex.message)
+        res.status(400).json({ error: ex.message });
         return;
     }
 
-    console.log("valid token");
-    res.status(200).json({message: 'valid token'});
+
+    logger.info("Token is Valid");
+    res.status(200).json({ message: 'Token is Valid' });
     return result
 }
 
 function authInitialize(req, res) {
-    console.log("Authenticating Credentials");
-    try{
-    var payload = req.body.data;
-    return res.json({ status : true , token : jwt.sign(payload, "secret", { expiresIn: 50, }) });
+    logger.info("Authenticating Credentials");
+    try {
+        var payload = req.body.data;
+        return res.json({ status: true, token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '2m', }) });
     }
-    catch(err)
-    {
-    return res.json({ status : false, message: err.message });   
+    catch (err) {
+        return res.json({ status: false, message: err.message });
     }
 }
 
@@ -79,8 +69,8 @@ var port = 7070
 var server = require('http').Server(app);
 server.listen(port, function (err) {
     if (!err) {
-         console.log('JSON Server is running at', port)
+        logger.info('Authentication Service running at PORT - ' + port)
     } else {
-        console.log("Error in starting REST API Server ", err);
+        logger.error("Error in starting Authentication Service " + err);
     }
 })

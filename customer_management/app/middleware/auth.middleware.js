@@ -1,28 +1,28 @@
 const axios = require('axios')
-const jwt = require('jsonwebtoken');
+const logger = require("../config/winston")
 
 module.exports = {
     authValidate: async (req, res, next) => {
         const authHeader = req.headers['authorization']
         const token = authHeader.split(' ')[1]
+        if(!token) {  return res.status(403).json({ Message : "Token Not Present, Please login."}) }
         try {
             const result = await axios.get("http://localhost:7070/validate/token", {
                 headers: {
-                    Authorization: `JWT ${token}`
+                    authorization: `JWT ${token}`
                 }
             })
 
             if (result.status === 200) {
-                console.log("Auth successful")
+                logger.info("Token Authentiation Successful"); 
                 return next()
             } else {
-                console.log("Auth failed")
-                res.status(403).json({ 'error': 'unauthorized error' })
-                return;
+                logger.error("Token Authentiation Failed"); 
+               
             }
         } catch (error) {
-            console.log("Auth exception")
-            res.status(403).json({ 'error': 'unauthorized error' })
+            logger.error("Token Authentiation Failed"); 
+            res.status(403).json(error.message)
             return;
         }
     },
@@ -40,32 +40,20 @@ module.exports = {
                 })
     
             if (result.status === 200 && result.data.status) {
+                logger.info("Token Initialization Successful"); 
+                console.log("Token Initialization Successful")
                 return result.data
             } else {
-                console.log("Auth failed")
+                logger.error("Token Initialization Failed"); 
+                console.log("Token Initialization Failed")
                 console.log(result)
                 return result
             }
         } catch (error) {
-            console.log("Auth exception")
+            logger.error("Token Initialization Exception"); 
+            console.log("Token Initialization Exception")
             return;
         }
-    },
-    authenticateToken: async (req, res, next) => {
-        const authHeader = req.headers['authorization']
-        const token = authHeader && authHeader.split(' ')[1]
-      
-        if (token == null) return res.sendStatus(401)
-      
-        jwt.verify(token,  "secret", (err, user) => {
-            console.log(err)
-      
-          if (err) return res.sendStatus(403)
-      
-          req.user = user
-      
-          next()
-        })
-      }
+    }
 
 }

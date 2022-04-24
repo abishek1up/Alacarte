@@ -1,21 +1,22 @@
 // Business logic
 // Database etc 
-var test = require('mongoose');
 const Customer = require("../models/customer")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken");
 const  { authValidate, authInitialize } = require("../middleware/auth.middleware");
+const logger = require("../config/winston")
 
 module.exports = {
     loginUser: async (body) => {
         if (Object.keys(body).length !== 0) {
             const { email, password } = body;
             const user = await User.findOne({ email });
-            var tokenT = "";
             if (!user) {
+                logger.error("User doesn't exist. Please register."); 
                 return { Status: "Fail", StatusCode: 404, message: "User doesn't exist. Please register." };
             }
             else if (password !== user.password) {
+                logger.error("Unauthorized : Password Incorrect"); 
                 return { Status: "Fail", StatusCode: 401, message: "Unauthorized : Password Incorrect" };
             }
             else {

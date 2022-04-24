@@ -4,12 +4,12 @@ const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const express = require('express')
 const cors = require('cors')
-
+var winston = require('./config/winston')
+const morgan = require('morgan')
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require("swagger-ui-express");
 
 const app = express()
-const jwt = require("jsonwebtoken");
 
 const customerRoutes = require('./routes/customer.route')
 const userRoutes = require('./routes/user.route')
@@ -41,7 +41,6 @@ app.use("/customer",jsonParser, customerRoutes)
 app.get("/health", (req, res) => {
     res.send("OK")
 })
-
 
 
 module.exports = app;

@@ -13,33 +13,11 @@ const url = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}
 const responseTime = require('response-time')
 const { promisify } = require('util')
 
-/* const client = redis.createClient({
-    host: '127.0.0.1',
-    port: 6379,
-})
- */
-/* let client;
-
-client = redis.createClient(6379, '127.0.0.1');
-
-  client.connect();
-*/
-
 async function connectRedis() {
-    const client = redis.createClient({
-        url
-        //host: process.env.REDIS_HOST,
-      
-        //password: process.env.REDIS_PASSWORD,
-       
-        //database: 'restdb'
-      });
+    const client = redis.createClient({url});
     
       client.on('ready', () => console.log('Redis Client Ready',));
       client.on('error', (err) => console.log('Redis Client Error', err));
-    
-     // GET_ASYNC = promisify(client.get).bind(client)
-      //SET_ASYNC = promisify(client.set).bind(client) 
 
       await client.connect();
       return client;
@@ -47,7 +25,6 @@ async function connectRedis() {
 
 async function setCache(key, data) {  
     const client = await connectRedis()
-    //const SET_ASYNC = promisify(client.set).bind(client) 
     const saveResult = await client.set(key, JSON.stringify(data))
     console.log('New Data Cached for key',key)
     return (saveResult)
@@ -55,7 +32,6 @@ async function setCache(key, data) {
 
 async function getCache(key) {       
     const client = await connectRedis()
-    //const GET_ASYNC = promisify(client.get).bind(client)
     const resp = await client.get(key)
     if(resp)
     {
@@ -71,8 +47,6 @@ async function delCache(key) {
     const resp = await client.del(key)
    
 }
-
-//const isAuthenticated = require(".../isAuthenticated");
 
 module.exports = {
     getALLRestaurants: async (req, res) => {
@@ -143,15 +117,16 @@ module.exports = {
         else
         res.status(restaurants.StatusCode).json(restaurants);
     },
-    cacheDB: async (req, res) => {
+
+    completeCache: async (req, res) => {
         try {
-            const restaurants = await restaurantService.cacheDB();
+            const restaurants = await restaurantService.completeCache(req.params.restaurant_id);
         
-            const result = await getCache("Test3");
+            const result = await getCache(req.params.restaurant_id);
             if(!result)
             {
-                console.log('Not Cached')
-                const saveResult = await setCache("Test3", restaurants)
+                console.log('Restuarant Id-'+req.params.restaurant_id+' is Not Cached')
+                const saveResult = await setCache(req.params.restaurant_id, restaurants)
                 console.log('Cached Value', saveResult)
             }         
             

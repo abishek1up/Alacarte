@@ -4,7 +4,7 @@ const restaurantRoutes = express.Router()
 const restaurantController = require("../controllers/restaurant.controller");
 
 restaurantRoutes.get("/", restaurantController.getALLRestaurants)
-restaurantRoutes.get("/cache/", restaurantController.cacheDB)
+restaurantRoutes.get("/completeCache/:restaurant_id", restaurantController.completeCache)
 
 restaurantRoutes.get("/:restaurant_id", restaurantController.getRestaurantByID)
 restaurantRoutes.post("/", restaurantController.createRestaurant)

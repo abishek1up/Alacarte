@@ -187,10 +187,30 @@ module.exports = {
             return res;
         }
     },
-    cacheDB: async () => {
-        const restaurants = await restaurant.find().exec()
-        return restaurants
+
+    completeCache: async (restaurant_id) => {
+        try {
+            const restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+            if (restaurants != null) {
+                const menus = await menu.findOne({ menu_id: restaurants.menu_id })
+                if (menus != null) {
+                    var wholeCache = { restaurant : restaurants, menu : menus};
+                    return wholeCache
+                }
+                else {
+                    return restaurants;
+                }
+            }
+            else {
+                return { Status: "ERROR", StatusCode: 400, Message: "No restaurant for this Restaurant Id" };
+            }
+        }
+        catch (err) {
+            return { Status: "ERROR", StatusCode: 400, Message: err.message };
+        }
     },
+
+    
 
 
     getRestaurantMenu: async (restaurant_id) => {
