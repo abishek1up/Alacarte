@@ -1,6 +1,6 @@
 // Business logic
 // Database etc 
-
+var test = require('mongoose');
 const Customer = require("../models/customer")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken");

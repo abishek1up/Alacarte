@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-
+var test = require('mongoose');
 const customerschema = Joi.object({ 
     name: Joi.string().min(3).max(30).required(),
     customerId: Joi.number().integer().min(1000).max(1000000000), 
