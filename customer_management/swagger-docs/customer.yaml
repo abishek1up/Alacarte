@@ -16,6 +16,15 @@ paths:
       responses:          # server responses
         200:
           description: An object with Customer details
+        401:
+          description: 401 - Unauthorized
+          $ref: '#/definitions/Unauthorized'
+        400:
+          description: 400 - Bad Request
+          $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: 422 - Unprocessable Entity
+          $ref: '#/definitions/BadRequest'  
     put:                 # endpoint request type (post request)
       tags:               # Tag property
         - Customer            # Value of the tag
@@ -38,6 +47,15 @@ paths:
       responses:          # server responses
         200:
           description: It enables a user to update the details
+        401:
+          description: 401 - Unauthorized
+          $ref: '#/definitions/Unauthorized'
+        400:
+          description: 400 - Bad Request
+          $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: 422 - Unprocessable Entity
+          $ref: '#/definitions/BadRequest'  
     delete:                 # endpoint request type (post request)
       tags:               # Tag property
         - Customer            # Value of the tag
@@ -47,13 +65,22 @@ paths:
       parameters:         # request parameters
       - in: path          # request body
         name: customerId     # name of request, can be any name
-        description: It enables a user to update the details by customer id
+        description: It enables a user to delete by customer id
         required: true   # can also be true depending on user preference
         schema:           # Schema definition
           type: integer        # request parameters
       responses:          # server responses
         200:
           description: An object with user details
+        401:
+          description: 401 - Unauthorized
+          $ref: '#/definitions/Unauthorized'
+        400:
+          description: 400 - Bad Request
+          $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: 422 - Unprocessable Entity
+          $ref: '#/definitions/BadRequest'  
 
 definitions:        # Schema defination for request body
   Customer:
@@ -82,3 +109,24 @@ definitions:        # Schema defination for request body
             type: string
           state:
             type: string
+  BadRequest:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+            type: string
+  Unauthorized:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string     
+  NotFound:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string   

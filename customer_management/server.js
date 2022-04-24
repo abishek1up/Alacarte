@@ -7,11 +7,11 @@ const connectMongo = require("./app/config/customerdb");
 const server = http.createServer(app)
 
 // we don't node.js to listen on port during unit testing
-if (process.env.NODE_ENV !== "test"){
+if (process.env.NODE_ENV == "prod"){
     const IP_ADDRESS = process.env.IP_ADDRESS || "0.0.0.0"
     const PORT = +process.env.PORT || 8082
     console.log("IP Address:", IP_ADDRESS, ", Port:", PORT)
-
+    console.log("PROD ENV Connected")
     Promise.all( [
         connectMongo()
     ])
@@ -23,6 +23,32 @@ if (process.env.NODE_ENV !== "test"){
                 console.error("Could not listen ", err);
                 return;
             });
+        
+            console.log("Working on port ", PORT);
+    })
+    .catch(err => {
+        console.log("Failed to connect db ", err)
+        process.exit(-1)
+    })
+
+}
+else if (process.env.NODE_ENV == "test"){
+    const IP_ADDRESS = process.env.IP_ADDRESS || "0.0.0.0"
+    const PORT = +process.env.PORT || 8082
+    console.log("IP Address:", IP_ADDRESS, ", Port:", PORT)
+    console.log("TEST ENV Connected")
+
+    Promise.all( [
+        connectMongo()
+    ])
+    .then ( results => {
+        console.log("Mongo db Connected")
+        /* server.listen(PORT, IP_ADDRESS, function(err){
+   
+            if (err)
+                console.error("Could not listen ", err);
+                return;
+            }); */
         
             console.log("Working on port ", PORT);
     })

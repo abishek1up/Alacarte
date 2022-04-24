@@ -8,8 +8,6 @@ const cors = require('cors')
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require("swagger-ui-express");
 
-/* const swaggerDocument_Customer = require('../swagger_Customer.json');
-const swaggerDocument_User = require('../swagger_User.json'); */
 const app = express()
 const jwt = require("jsonwebtoken");
 
@@ -28,29 +26,12 @@ const swaggerDefinition = {
 };
 
 const options = {
-  // import swaggerDefinitions
   swaggerDefinition,
-  // path to the API docs
   apis: ['./swagger-docs/**/*.yaml'],
 };
-// initialize swagger-jsdoc
+
 const swaggerSpec = swaggerJSDoc(options);
-
-// use swagger-Ui-express for your app documentation endpoint
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
-/* app.use(
-    '/swagger-customer',
-    swaggerUi.serve, 
-    swaggerUi.setup(swaggerDocument_Customer)
-  );
-  
-  app.use(
-    '/swagger-user',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocument_User)
-  ); */
 
 app.use(cors())
 

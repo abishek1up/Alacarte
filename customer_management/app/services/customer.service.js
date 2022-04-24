@@ -4,6 +4,7 @@
 const Customer = require("../models/customer")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken");
+const  { authValidate, authInitialize } = require("../middleware/auth.middleware");
 
 module.exports = {
     loginUser: async (body) => {
@@ -19,11 +20,16 @@ module.exports = {
             }
             else {
                 const payload = {
-                    email,
-                    name: user.name
+                    email: email,
+                    password: password
                 };
-                var token = await jwt.sign(payload, "secret", { expiresIn: 5, });
-                return { Status: "SUCCESS", StatusCode: 200, message: "User Logged in Successfully.", accessToken: token };;
+
+                //Initialize Auth Token
+                var tokenGenerator = await authInitialize(payload);
+                if(!tokenGenerator.status){
+                    return { Status: "Fail", StatusCode: 401, message: "Token not generated", error_info : token};
+                }
+                return { Status: "SUCCESS", StatusCode: 200, message: "User Logged in Successfully.", accessToken: tokenGenerator.token };
             }
         }
         else {
@@ -36,18 +42,16 @@ module.exports = {
             const userExists = await User.findOne({ email });
 
             if (userExists) {
-                return { Status: "Fail", StatusCode: 400, Message: "User Email ID already exists" };
+                return { Status: "Fail", StatusCode: 409, Message: "User Email ID already exists" };
             }
             else {
                 var users = await User.create({ email: body.email, password: body.password })
-                    .then(function (newUser) {
-                        console.log(newUser);                       
+                    .then(function (newUser) {                      
                         return { Status: "SUCCESS", StatusCode: 201, Message: "New User Registered", customerId : newUser.customerId };
                     })
                     .catch(function (err) {
                         console.log("check", err.name)
                         if (err.name == 'ValidationError') {
-                            console.log("check", err.name)
                             return { Status: "ERROR", StatusCode: 422, Message: err.message }
                         } else {
                             return { Status: "ERROR", StatusCode: 500, Message: err.message }
@@ -77,7 +81,7 @@ module.exports = {
                 return customers
             }
             else {
-                return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID" };
+                return { Status: "ERROR", StatusCode: 404, Message: "No Customer matching this Customer ID" };
             }
         }
         catch (err) {
@@ -99,7 +103,7 @@ module.exports = {
                 }
             }
             else {
-                return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID" };
+                return { Status: "ERROR", StatusCode: 404, Message: "No Customer matching this Customer ID" };
             }
         }
         else {
@@ -113,14 +117,14 @@ module.exports = {
 
                 const customers = await Customer.deleteOne({ customerId: customerId })
                 const users = await User.deleteOne({ customerId: customerId })
-                return { Status: "SUCCESS", StatusCode: 200, Message: "USER Deactivated" }
+                return { Status: "SUCCESS", StatusCode: 200, Message: "USER Deactivated", acknowledged : true }
             }
             else {
-                return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID" };
+                return { Status: "ERROR", StatusCode: 404, Message: "No Customer matching this Customer ID" , acknowledged : false }
             }
         }
         catch (err) {
-            return { Status: "ERROR", StatusCode: 400, Message: err.message };
+            return { Status: "ERROR", StatusCode: 400, Message: err.message , acknowledged : false }
         }
     }
 }

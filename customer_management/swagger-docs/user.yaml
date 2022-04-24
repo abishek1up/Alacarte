@@ -15,11 +15,16 @@ paths:
           $ref: '#/definitions/UserLogin' 
       responses:          # server responses
         200:
-          description: An object with user details
+          description: 200 - Server Request Success   # <-----
         401:
-          $ref: '#/definitions/responses/Unauthorized'   # <-----
-        404:
-          $ref: '#/definitions/responses/NotFound'   
+          description: 401 - Unauthorized
+          $ref: '#/definitions/Unauthorized'
+        400:
+          description: 400 - Bad Request
+          $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: 422 - Unprocessable Entity
+          $ref: '#/definitions/BadRequest'   
 
   /user/register:       # path of the user from your endpoint
     post:                 # endpoint request type (post request)
@@ -30,7 +35,7 @@ paths:
       - application/json
       parameters:         # request parameters
       - in: body          # request body
-        name: sign up     # name of request, can be any name
+        name: register     # name of request, can be any name
         description: It enables a user to create an account
         required: false   # can also be true depending on user preference
         schema:           # Schema definition
@@ -38,6 +43,15 @@ paths:
       responses:          # server responses
         201:
           description: An object with user details
+        401:
+          description: 401 - Unauthorized
+          $ref: '#/definitions/Unauthorized'
+        400:
+          description: 400 - Bad Request
+          $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: 422 - Unprocessable Entity
+          $ref: '#/definitions/BadRequest'
 
 definitions:        # Schema defination for request body
   UserRegister:
@@ -62,4 +76,26 @@ definitions:        # Schema defination for request body
       email:
         type: string
       password:
+        type: string            
+  BadRequest:
+    type: object
+    properties:
+      statusCode:
         type: string
+      message:
+            type: string
+  Unauthorized:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string     
+  NotFound:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string   
+                
