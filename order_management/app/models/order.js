@@ -17,8 +17,8 @@ var OrderSchema = new mongoose.Schema({
   }],
   total_amount: {
     type: Number,
-    min: [10, 'Must be at least 10'],
-    max: 1000
+    min: [0, 'Must be at least 0'],
+    max: 100000
   },
   restaurant_Id: {
     type: String,

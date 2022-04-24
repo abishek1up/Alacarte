@@ -12,11 +12,6 @@ var ReviewSchema = new mongoose.Schema({
     min: [1000, 'Must be at least 10'],
     max: 1000000000 
   },
-  customerId: { 
-    type: Number,
-    min: [1000, 'Must be at least 10'],
-    max: 1000000000 
-  },
   rating: { 
     type: Number,
     min: [1, 'Must be at least 1'],

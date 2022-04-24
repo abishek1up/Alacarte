@@ -180,16 +180,16 @@ module.exports = {
         res.status(menus.StatusCode).json(menus);
     },
     updateRestaurantMenu: async (req, res,) => {
-        const menus = await restaurantService.updateRestaurantMenu(req.params.menu_id,req.body)
+        const menus = await restaurantService.updateRestaurantMenu(req.params.restaurant_id,req.params.menu_id,req.body)
         if (menus.StatusCode == null) {
             return res.status(200).json(menus);
         }
         else {
-            return res.status(restaurants.StatusCode).json(menus);
+            return res.status(menus.StatusCode).json(menus);
         }
     },
     deleteRestaurantMenu: async (req, res) => {
-        const check = await restaurantService.deleteRestaurantMenu(req.params.menu_id)
+        const check = await restaurantService.deleteRestaurantMenu(req.params.restaurant_id,req.params.menu_id)
         if (check.acknowledged) {
             return res.status(200).json(check);
         }

@@ -9,12 +9,13 @@ var MenuSchema = new mongoose.Schema({
     min: [1, 'Must be at least 1'],
     max: 1000000000 
   },
-  item_id: {     
-    type: Number,
-    unique: true,
-    min: [1, 'Must be at least 1'],
-    max: 1000000000 
-  },
+  items: [
+    {
+      item_Id : { type : Number },
+      item_Name:  { type : String },
+      item_Cost: { type: Number }
+    }
+  ],
   type: {     
     type: String,
     enum: ['VEG', 'NON-VEG'],
@@ -26,12 +27,6 @@ var MenuSchema = new mongoose.Schema({
 },
 { collection: 'menu' });
 
-MenuSchema.plugin(autoIncrement.plugin, {
-    model: "menu", // collection or table name in which you want to apply auto increment
-    field: "item_id", // field of model which you want to auto increment
-    startAt: 1000, // start your auto increment value from 1
-    incrementBy: 1, // incremented by 1
-  });
 
 //minimum 3 letter title
 mongoose.model('menu', MenuSchema)

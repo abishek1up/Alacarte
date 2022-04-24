@@ -11,13 +11,13 @@ module.exports = {
     },
     placeOrder : async (req, res) => {
         const checkValid = await orderService.checkValid(req.params.customerId, req.params.restaurant_Id)
-        if(checkValid.acknowledged){
-            const orders = await orderService.placeOrder(req.body)
-            res.status(200).json(orders)
-        }
-        else{
-            res.status(400).json(checkValid)
-        } 
+        const totalAmountData = await orderService.checkTotalAmount(req.body.OrderItems,req.params.restaurant_Id,checkValid.acknowledged)         
+        const orders = await orderService.placeOrder(req.params.customerId,req.params.restaurant_Id,req.body,totalAmountData.acknowledged,totalAmountData.totalAmount)
+        
+        if(orders.StatusCode == null)
+        return res.status(200).json(orders);
+        else
+        res.status(orders.StatusCode).json(orders);
     },
     cancelOrder : async (req, res) => {
         const check = await orderService.cancelOrder(req.params.order_Id)
