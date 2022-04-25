@@ -18,15 +18,11 @@ const UserSchema = new mongoose.Schema({
   },
   customerId: {
     type: Number,
-    min: [1000, 'Must be at least 10'],
+    min: [1000, 'Must be at least 1000'],
     max: 1000000000,
     unique: true,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now(),
-  },
-}, { collection: 'user' });
+  }
+}, { collection: 'user' , timestamps: true });
 
 autoIncrement.initialize(mongoose.connection);
 UserSchema.plugin(autoIncrement.plugin, {

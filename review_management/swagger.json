@@ -1,213 +1,391 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "2.0", 
-    "title": "Review",
-    "description": "Review Search Service",
-    "license": {
-      "name": "MIT",
-      "url": "https://opensource.org/licenses/MIT"
-    }
-  },
-  "host": "localhost:8081",
-  "basePath": "/reviews",
-  "paths" : {
-    "/" : {
-        "get" : {
-            "summary" : "Get all the reviews",
-            "description": "Get all the reviews",
-            "produces": ["application/json"],
-            "parameters": [],
-            "responses": {
-                "200": {
-                    "description": "Successful Operation",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/review"
-                        }
-                    }
-                },
-                "400": {
-                    "description": "Invalid Status Value",
-                    "schema": {
-                        "$ref": "#/definitions/InvalidResponse"
-                    }
-                }
-            }
-        }
-        ,
-        "post" : {
-            "summary" : "Create a new Review",
-            "description": "Create a new Review",
-            "produces": ["application/json"],
-            "consumes": ["application/json"],
-            "parameters": [
-                {
-                    "in": "body",
-                    "name": "body",
-                    "description": "task object",
-                    "required": true,
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                            "review" : {
-                                "type": "object",
-                                "$ref": "#/definitions/review"
-                            } 
-                        }
-                    }
-                }
-            ],
-            "responses": {
-                "200": {
-                    "description": "Successful Operation",
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/definitions/review"
-                        }
-                    }
-                },
-                "400": {
-                    "description": "Invalid Status Value",
-                    "schema": {
-                        "$ref": "#/definitions/InvalidResponse"
-                    }
-                }
-            }
+    "swagger": "2.0",
+    "info": {
+        "version": "2.0",
+        "title": "Review Management Service",
+        "description": "Review Management Service",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "/{id}" : {
-        "get" : {
-          "summary" : "Get the Review",
-          "description": "Get the Review",
-          "produces": ["application/json"],
-          "parameters": [
-              {
-                  "name": "id",
-                  "in": "path",
-                  "description": "Review id that needs to be viewed",
-                  "required": true,
-                  "type": "integer"
-              }
-          ],
-          "responses": {
-              "200": {
-                  "description": "Successful Operation",
-                  "schema": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/definitions/review"
-                      }
-                  }
-              },
-              "400": {
-                  "description": "Invalid Status Value",
-                  "schema": {
-                      "$ref": "#/definitions/InvalidResponse"
-                  }
-              }
-          }
-      },
-
-      "delete" : {
-        "summary" : "Delete the Review",
-        "description":  "Delete the Review",
-        "produces": ["application/json"],
-        "parameters": [
-            {
-                "name": "id",
-                "in": "path",
-                "description": "Review id that needs to be deleted",
-                "required": true,
-                "type": "string"
+    "host": "localhost:8081",
+    "basePath": "/reviews",
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Get all the reviews",
+                "description": "Get all the reviews",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All Reviews Fetched Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
             },
-            {
-                "in": "body",
-                "name": "body",
-                "description": "task object",
-                "required": true,
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "review" : {
+            "post": {
+                "summary": "Create a new Review",
+                "description": "Create a new Review",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Post Object",
+                        "required": true,
+                        "schema": {
                             "type": "object",
                             "$ref": "#/definitions/review"
-                        } 
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Order Placed Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
                     }
                 }
             }
-        ],
-        "responses": {
-            "200": {
-                "description": "Successful Operation",
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/todosResponse"
+        },
+        "/{review_Id}": {
+            "get": {
+                "summary": "Get the Review Details by Review ID",
+                "description": "Get the Review Details by Review ID",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "review_Id",
+                        "in": "path",
+                        "description": "review_Id that needs to be viewed",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review Fetched Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
                     }
                 }
             },
-            "400": {
-                "description": "Invalid Status Value",
-                "schema": {
-                    "$ref": "#/definitions/InvalidResponse"
+            "put": {
+                "summary": "Update Review by Review ID",
+                "description": "Update Review by Review ID",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "review_Id",
+                        "in": "path",
+                        "description": "Review id that needs to be viewed",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Review Post Object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/reviewUpdate"
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review Updated Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
                 }
-            }
-        }
-    }
-  }
-},
-"definitions": {
-    "review": {
-        "type": "object",
-        "properties": {
-            "review_Id": {
-                "type": "integer"
             },
-            "restaurant_Id": {
-                "type": "integer"
-            },
-            "customerId": {
-                "type": "integer"
-            },
-            "rating": {
-                "type": "integer"
-            },
-            "detail": {
-                "type": "string"
+            "delete": {
+                "summary": "Delete the Review",
+                "description": "Delete the Review",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "review_Id",
+                        "in": "path",
+                        "description": "Review ID that needs to be deleted",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review Deleted Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
             }
         }
     },
-  "Task": {
-      "type": "object",
-      "properties": {
-          "task": {
-              "type": "string"
-          },
-          "assignee": {
-              "type": "string"
-          },
-          "status": {
-              "type": "string"
-          }
-      }
-  },
-  "InvalidResponse": {
-      "type": "object",
-      "properties": {
-          "statusCode": {
-              "type": "string"
-          },
-          "message": {
-              "type": "string"
-          }
-      }
-
-  }
-},
-  "schemes": ["http"],
-  "consumes": ["application/json"],
-  "produces": ["application/json"]
+    "definitions": {
+        "review": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "integer"
+                },
+                "restaurantId": {
+                    "type": "integer"
+                },
+                "customerId": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "number",
+                    "multipleOf": 0.1
+                },
+                "review": {
+                    "type": "string"
+                }
+            }
+        },
+        "reviewUpdate": {
+            "type": "object",
+            "properties": {
+                "review": {
+                    "type": "string"
+                }
+            }
+        },
+        "InvalidResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
 }

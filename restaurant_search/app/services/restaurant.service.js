@@ -3,7 +3,6 @@
 
 const restaurant = require("../models/restaurant")
 const menu = require("../models/menu")
-var test = require('mongoose');
 
 module.exports = {
     // params is object, for parameters from controllers
@@ -21,9 +20,9 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    getRestaurantByID: async (restaurant_id) => {
+    getRestaurantByID: async (restaurantId) => {
         try {
-            const restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+            const restaurants = await restaurant.findOne({ restaurantId: restaurantId })
             if (restaurants != null) {
                 return restaurants
             }
@@ -36,20 +35,16 @@ module.exports = {
         }
     },
     createRestaurant: async (body) => {
-        if (Object.keys(body).length !== 0) {
             var restaurants = await restaurant.create(body);
-            return { Status: "SUCCESS", StatusCode: 201, Message: "New Restaurant created" };
-        }
-        else {
-            return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
-        }
+            return { Status: "SUCCESS", StatusCode: 201, Message: "New Restaurant created" ,restaurantId : restaurants.restaurantId };
+        
     },
-    deleteRestaurantByID: async (restaurant_id) => {
+    deleteRestaurantByID: async (restaurantId) => {
         try {
-            var check = await restaurant.findOne({ restaurant_id: restaurant_id })
+            var check = await restaurant.findOne({ restaurantId: restaurantId })
             if (check != null) {
 
-                const Restaurants = await restaurant.deleteOne({ restaurant_id: restaurant_id })
+                const Restaurants = await restaurant.deleteOne({ restaurantId: restaurantId })
                 return { Status: "SUCCESS", StatusCode: 200, Message: "Restaurant Deleted", acknowledged: Restaurants.acknowledged }
             }
             else {
@@ -60,13 +55,12 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    updateRestaurantDetailsByID: async (restaurant_id, body) => {
-        if (Object.keys(body).length !== 0) {
-            var check = await restaurant.findOne({ restaurant_id: restaurant_id })
+    updateRestaurantDetailsByID: async (restaurantId, body) => {
+            var check = await restaurant.findOne({ restaurantId: restaurantId })
             if (check != null) {
                 try {
-                    const customers = await restaurant.updateOne({ restaurant_id: restaurant_id }, { $set: { address: body.address, cuisine: body.cuisine, budget: body.budget, name: body.name } }, { new: true })
-                    const customers2 = await restaurant.findOne({ restaurant_id: restaurant_id })
+                    const customers = await restaurant.updateOne({ restaurantId: restaurantId }, { $set: { address: body.address, cuisine: body.cuisine, budget: body.budget, name: body.name } }, { new: true })
+                    const customers2 = await restaurant.findOne({ restaurantId: restaurantId })
                     return customers2
 
                 }
@@ -75,16 +69,12 @@ module.exports = {
                 }
             }
             else {
-                return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID" };
+                return { Status: "ERROR", StatusCode: 400, Message: "No Restaurant matching this Restaurant ID" };
             }
-        }
-        else {
-            return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
-        }
     },
     updateRestaurantRating: async (Id, avgRating, totalRatings) => {
         try {
-            const restaurants = await restaurant.updateOne({ restaurant_id: Id }, { $set: { ratings: avgRating, total_reviews: totalRatings } }, { new: true })
+            const restaurants = await restaurant.updateOne({ restaurantId: Id }, { $set: { ratings: avgRating, total_reviews: totalRatings } }, { new: true })
             return restaurants
         }
         catch (err) {
@@ -127,72 +117,12 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    searchRestaurantViaDistance: async (Id, body) => {
-        try {
-            const restaurants = await restaurant.findOne({ _id: Id })
-            if (et != null) {
-                return restaurants
-            }
-            else {
-                let message = "the Id is not present";
-                var res = {};
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                }
-                return res;
-            }
-        }
-        catch (err) {
-            console.log(err);
-            let message = err.message;
-            var res = { "statusCode": 200, "json": {} };
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
-            }
-            return res;
-        }
-    },
-    searchRestaurantViaCoordinates: async (Id, body) => {
-        try {
-            const restaurants = await restaurant.findOne({ _id: Id })
-            if (et != null) {
-                return restaurants
-            }
-            else {
-                let message = "the Id is not present";
-                var res = {};
-                res.statusCode = 400
-                res.acknowledged = false
-                res.json = {
-                    success: false,
-                    message: message,
-                }
-                return res;
-            }
-        }
-        catch (err) {
-            console.log(err);
-            let message = err.message;
-            var res = { "statusCode": 200, "json": {} };
-            res.statusCode = 400
-            res.json = {
-                success: false,
-                message: message,
-            }
-            return res;
-        }
-    },
 
-    completeCache: async (restaurant_id) => {
+    completeCache: async (restaurantId) => {
         try {
-            const restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+            const restaurants = await restaurant.findOne({ restaurantId: restaurantId })
             if (restaurants != null) {
-                const menus = await menu.findOne({ menu_id: restaurants.menu_id })
+                const menus = await menu.findOne({ menuId: restaurants.menuId })
                 if (menus != null) {
                     var wholeCache = { restaurant : restaurants, menu : menus};
                     return wholeCache
@@ -213,11 +143,11 @@ module.exports = {
     
 
 
-    getRestaurantMenu: async (restaurant_id) => {
+    getRestaurantMenu: async (restaurantId) => {
         try {
-            var restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+            var restaurants = await restaurant.findOne({ restaurantId: restaurantId })
             if (restaurants != null) {
-                const menus = await menu.findOne({ menu_id: restaurants.menu_id })
+                const menus = await menu.findOne({ menuId: restaurants.menuId })
                 if (menus != null) {
                     return menus
                 }
@@ -233,9 +163,9 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    createRestaurantMenu: async (body, restaurant_id) => {
-        if (Object.keys(body).length != 0) {
-            var restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+    createRestaurantMenu: async (body, restaurantId) => {
+         try{
+            var restaurants = await restaurant.findOne({ restaurantId: restaurantId })
             if (restaurants != null) {
                 var itemIDArray = [];
                 var menu_items = body.items;
@@ -249,7 +179,7 @@ module.exports = {
                     }
                 }
                 if (itemIDArray.length == 0) { return { Status: "ERROR", StatusCode: 400, Message: "No Items Ordered" }; }
-                var menus = await menu.create({ menu_id: restaurants.menu_id, type: body.type, items: itemIDArray })
+                var menus = await menu.create({ menuId: restaurants.menuId, type: body.type, items: itemIDArray })
 
                 return { Status: "SUCCESS", StatusCode: 201, Message: "New menu created" };
             }
@@ -257,16 +187,17 @@ module.exports = {
                 return { Status: "ERROR", StatusCode: 400, Message: "No Restaurants matching this Restaurant Id" };
             }
         }
-        else {
-            return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
+        catch (err) {
+            err.status = 400;
+            err.message.indexOf("duplicate key error collection")>-1 ? err.message = "Menu already existing for this Restaurant ID. Please try Update" : err.message
+            return { Status: 'ERROR', StatusCode: err.status, Message: err.message };
         }
     },
-    updateRestaurantMenu: async (restaurant_id, menu_id, body) => {
-        if (Object.keys(body).length !== 0) {
-            var restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+    updateRestaurantMenu: async (restaurantId, menuId, body) => {
+            var restaurants = await restaurant.findOne({ restaurantId: restaurantId })
             if (restaurants != null) {
-                if (restaurants.menu_id == menu_id) {
-                    var check = await menu.findOne({ menu_id: menu_id })
+                if (restaurants.menuId == menuId) {
+                    var check = await menu.findOne({ menuId: menuId })
                     if (check != null) {
                         try {
                             var itemIDArray = [];
@@ -281,8 +212,8 @@ module.exports = {
                                 }
                             }
                             if (itemIDArray.length == 0) { return { Status: "ERROR", StatusCode: 400, Message: "No Items Ordered" }; }
-                            const menus = await menu.updateOne({ menu_id: menu_id }, { $set: { type: body.type, items: itemIDArray } }, { new: true })
-                            const menus2 = await menu.findOne({ menu_id: menu_id })
+                            const menus = await menu.updateOne({ menuId: menuId }, { $set: { type: body.type, items: itemIDArray } }, { new: true })
+                            const menus2 = await menu.findOne({ menuId: menuId })
                             return menus2
 
                         }
@@ -301,20 +232,16 @@ module.exports = {
             else {
                 return { Status: "ERROR", StatusCode: 400, Message: "No Restaurant connected with this menu ID" };
             }
-        }
-        else {
-            return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
-        }
     },
-    deleteRestaurantMenu: async (restaurant_id, menu_id) => {
+    deleteRestaurantMenu: async (restaurantId, menuId) => {
         try {
-            var restaurants = await restaurant.findOne({ restaurant_id: restaurant_id })
+            var restaurants = await restaurant.findOne({ restaurantId: restaurantId })
             if (restaurants != null) {
-                if (restaurants.menu_id == menu_id) {
-                    var check = await menu.findOne({ menu_id: menu_id })
+                if (restaurants.menuId == menuId) {
+                    var check = await menu.findOne({ menuId: menuId })
                     if (check != null) {
 
-                        const menus = await menu.deleteOne({ menu_id: menu_id })
+                        const menus = await menu.deleteOne({ menuId: menuId })
                         return { Status: "SUCCESS", StatusCode: 200, Message: "menu Deleted", acknowledged: menus.acknowledged }
                     }
                     else {

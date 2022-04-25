@@ -1,13 +1,15 @@
 const express = require("express");
 const reviewController = require("../controllers/review.controller");
+const  { authValidate, authInitialize } = require("../middleware/auth.middleware");
 
 const reviewRoutes = express.Router()
 
 // /reviews is prefix from app/index.js 
-reviewRoutes.get("/", reviewController.getAllReviews)
-reviewRoutes.get("/:review_Id", reviewController.getReview)
-reviewRoutes.post("/", reviewController.postReview)
-reviewRoutes.delete("/:review_Id", reviewController.deleteReview)
-reviewRoutes.put("/:review_Id", reviewController.updateReview)
+reviewRoutes.get("/",authValidate, reviewController.getAllReviews)
+
+reviewRoutes.post("/",authValidate, reviewController.postReview)
+reviewRoutes.get("/:review_Id",authValidate, reviewController.getReview)
+reviewRoutes.put("/:review_Id",authValidate, reviewController.updateReview)
+reviewRoutes.delete("/:review_Id",authValidate, reviewController.deleteReview)
 
 module.exports = reviewRoutes

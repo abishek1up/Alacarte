@@ -39,12 +39,12 @@ var RestaurantSchema = new mongoose.Schema({
     max: 10000 
   },
   total_reviews:  { type: Number , 
-    min: [1, 'Must be at least 1'],
+    min: [0, 'Must be at least 1'],
     max: 100000  
   },
   ratings:  { 
     type: Number,
-    min: [1, 'Must be at least 1'],
+    min: [0, 'Must be at least 1'],
     max: 5  
   },
   name: {
@@ -54,38 +54,34 @@ var RestaurantSchema = new mongoose.Schema({
     message :'String length should be within 4 to 20 Characters' ,
     index: true
   },
-  restaurant_id: {
+  restaurantId: {
     type: Number,
     unique: true,
-    min: [999, 'Must be at least 1'],
+    min: [1000, 'Must be at least 1'],
     max: 1000000000 
   },
-  created_at: {
-    type: Date,
-    default: Date.now(),
-  },
-  menu_id: {     
+  menuId: {     
     type: Number,
     unique: true,
-    min: [1, 'Must be at least 1'],
+    min: [1000, 'Must be at least 1'],
     max: 1000000000 
-  },
+  }
 },
-{ collection: 'restaurant' });
+{ collection: 'restaurant', timestamps: true });
 
 RestaurantSchema.index({name: 'text'});
 //minimum 3 letter title
 autoIncrement.initialize(mongoose.connection);
 RestaurantSchema.plugin(autoIncrement.plugin, {
   model: "restaurant", // collection or table name in which you want to apply auto increment
-  field: "restaurant_id", // field of model which you want to auto increment
+  field: "restaurantId", // field of model which you want to auto increment
   startAt: 1000, // start your auto increment value from 1
   incrementBy: 1, // incremented by 1
 });
 
 RestaurantSchema.plugin(autoIncrement.plugin, {
   model: "menu", // collection or table name in which you want to apply auto increment
-  field: "menu_id", // field of model which you want to auto increment
+  field: "menuId", // field of model which you want to auto increment
   startAt: 1000, // start your auto increment value from 1
   incrementBy: 1, // incremented by 1
 });

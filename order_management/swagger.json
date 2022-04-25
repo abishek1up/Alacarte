@@ -12,7 +12,7 @@
     "host": "localhost:8083",
     "basePath": "/order",
     "paths": {
-        "/{customerId}/{restaurant_Id}": {
+        "/": {
             "post": {
                 "summary": "Place a new Order",
                 "description": "Place a new Order",
@@ -24,38 +24,28 @@
                 ],
                 "parameters": [
                     {
-                        "name": "customerId",
-                        "in": "path",
-                        "description": "customerId that needs to be updated",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
-                        "name": "restaurant_Id",
-                        "in": "path",
-                        "description": "restaurant_Id that needs to be updated",
-                        "required": true,
-                        "type": "integer"
-                    },
-                    {
                         "in": "body",
                         "name": "body",
-                        "description": "task object",
+                        "description": "Order Details including Customer ID and Restaurant ID",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "properties": {
-                                "restaurantData": {
-                                    "type": "object",
-                                    "$ref": "#/definitions/OrderCreate"
-                                }
-                            }
+                            "$ref": "#/definitions/OrderCreate"
+                        }
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Order Placed Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -64,7 +54,25 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid status value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -72,7 +80,7 @@
                 }
             }
         },
-        "/{order_Id}": {            
+        "/{orderId}": {
             "get": {
                 "summary": "Get the Order Details",
                 "description": "Get the Order Details",
@@ -81,49 +89,25 @@
                 ],
                 "parameters": [
                     {
-                        "name": "order_Id",
+                        "name": "orderId",
                         "in": "path",
-                        "description": "order_Id that needs to be viewed",
+                        "description": "orderId that needs to be viewed",
                         "required": true,
                         "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Order"
-                            }
-                        }
                     },
-                    "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/definitions/InvalidResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "summary": "Cacnel the Order",
-                "description": "Cacnel the Order",
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
                     {
-                        "name": "order_Id",
-                        "in": "path",
-                        "description": "order_Id that needs to be canceled",
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
                         "required": true,
-                        "type": "integer"
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Order Fetched Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -132,7 +116,85 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid status value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Cancel the Order",
+                "description": "Cancel the Order",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "description": "orderId that needs to be canceled",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "description": "Authorization token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order Placed Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -145,36 +207,36 @@
         "OrderCreate": {
             "type": "object",
             "properties": {
-                "OrderItems": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "restaurant_Id": {
+                "restaurantId": {
                     "type": "integer"
                 },
                 "customerId": {
                     "type": "integer"
+                },
+                "OrderItems": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
         "Order": {
             "type": "object",
             "properties": {
-                "order_Id": {
+                "orderId": {
                     "type": "array"
                 },
                 "OrderItems": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "type": "object"
                     }
                 },
                 "total_amount": {
                     "type": "integer"
                 },
-                "restaurant_Id": {
+                "restaurantId": {
                     "type": "integer"
                 },
                 "customerId": {

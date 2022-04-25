@@ -20,7 +20,7 @@ var options = {
 // instantiate a new Winston Logger with the settings defined above
 var logger = new winston.createLogger({
     level: 'info',     
-    defaultMeta: { service: 'Order Management Service' , timestamp: new Date() },
+    defaultMeta: { service: 'Order Management Service' , timestamp: new Date().toLocaleString() },
   transports: [
     new winston.transports.File(options.file),
     new winston.transports.Console(options.console)

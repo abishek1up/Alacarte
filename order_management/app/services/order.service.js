@@ -21,9 +21,9 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    getOrder: async (order_Id) => {
+    getOrder: async (orderId) => {
         try {
-            const orders = await Order.findOne({ order_Id: order_Id })
+            const orders = await Order.findOne({ orderId: orderId })
             if (orders != null) {
                 return orders
             }
@@ -37,39 +37,32 @@ module.exports = {
     },
     placeOrder: async (body, acknowledged, totalAmount, orderArray) => {
         try {
-            if (!acknowledged) throw new Error('Restaurant ID or Customer ID is Invalid')
-            if (Object.keys(body).length !== 0) {
-
-                var orders = await Order.create({ restaurant_Id: body.restaurant_Id, customerId: body.customerId, OrderItems: orderArray, total_amount: totalAmount })
+            if (!acknowledged) throw new Error('Either Restaurant ID or Customer ID is Invalid')
+                var orders = await Order.create({ restaurantId: body.restaurantId, customerId: body.customerId, OrderItems: orderArray, total_amount: totalAmount })
                 if (orders != null)
-                    return { Status: "SUCCESS", StatusCode: 201, Message: "New Order Created" };
-            }
-            else {
-                return { Status: "ERROR", StatusCode: 400, Message: "Empty Request Body" };
-            }
+                    return { Status: "SUCCESS", StatusCode: 201, Message: "New Order Created" , Details : orders};
         }
         catch (err) {
             return { Status: "ERROR", StatusCode: 400, acknowledged: false, Message: err.message };
         }
     },
-    cancelOrder: async (order_Id) => {
+    cancelOrder: async (orderId) => {
         try {
-            var check = await Order.findOne({ order_Id: order_Id })
-            console.log(check)
+            var check = await Order.findOne({ orderId: orderId })
             if (check != null) {
-                const orders = await Order.deleteOne({ order_Id: order_Id })
+                const orders = await Order.deleteOne({ orderId: orderId })
                 if (orders != null)
                     return { Status: "SUCCESS", StatusCode: 200, acknowledged: orders.acknowledged }
             }
             else {
-                return { Status: "ERROR", StatusCode: 400, Message: "No Customer matching this Customer ID", acknowledged: false };
+                return { Status: "ERROR", StatusCode: 404, Message: "No Customer matching this Customer ID", acknowledged: false };
             }
         }
         catch (err) {
             return { Status: "ERROR", StatusCode: 400, Message: err.message, acknowledged: false };
         }
     },
-    checkValid: async (customerId, restaurant_id, tokenHeader) => {
+    checkValid: async (customerId, restaurantId, tokenHeader) => {
         try {
             var checkCustomer = await axios.get("http://localhost:8082/customer/" + customerId, {
                 headers: {
@@ -84,7 +77,7 @@ module.exports = {
                     let err = new Error(error.response.data.Message); err.status = error.response.status; throw err;
                 })
 
-            var checkRestaurant = await axios.get("http://localhost:8080/restaurants/" + restaurant_id)
+            var checkRestaurant = await axios.get("http://localhost:8080/restaurants/" + restaurantId)
                 .then(function (response) {
                     if (response.status != 200) { let err = new Error(response.Message); err.status = response.status; throw err; }
                     return response;
@@ -102,10 +95,10 @@ module.exports = {
             return { Status: "ERROR", StatusCode: err.status, acknowledged: false, Message: err.message };
         }
     },
-    checkTotalAmount: async (orderItems, restaurant_Id, acknowledged) => {
+    checkTotalAmount: async (orderItems, restaurantId, acknowledged) => {
         try {
             if (!acknowledged) throw new Error('Errorrr')
-            var checkRestaurant = await axios.get("http://localhost:8080/restaurants/" + restaurant_Id + "/menu")
+            var checkRestaurant = await axios.get("http://localhost:8080/restaurants/" + restaurantId + "/menu")
                 .then(async function (response) {
                     var menuItems = response.data.items
                     var totalAmount = 0;

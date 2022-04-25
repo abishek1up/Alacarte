@@ -9,7 +9,7 @@ var CustomerSchema = new mongoose.Schema({
   },
   customerId: {
     type: Number,
-    min: [1000, 'Must be at least 10'],
+    min: [1000, 'Must be at least 1000'],
     max: 1000000000,
     unique: true,
   },
@@ -27,7 +27,7 @@ var CustomerSchema = new mongoose.Schema({
       message: 'State length should be within 4 to 20 Characters'
     },
   }
-}, { collection: 'customer' });
+}, { collection: 'customer' , timestamps: true });
 
 
 mongoose.model('Customers', CustomerSchema)

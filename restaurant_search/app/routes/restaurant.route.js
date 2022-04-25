@@ -4,27 +4,20 @@ const restaurantRoutes = express.Router()
 const restaurantController = require("../controllers/restaurant.controller");
 
 restaurantRoutes.get("/", restaurantController.getALLRestaurants)
-restaurantRoutes.get("/completeCache/:restaurant_id", restaurantController.completeCache)
+restaurantRoutes.get("/completeCache/:restaurantId", restaurantController.completeCache)
 
-restaurantRoutes.get("/:restaurant_id", restaurantController.getRestaurantByID)
+restaurantRoutes.get("/:restaurantId", restaurantController.getRestaurantByID)
 restaurantRoutes.post("/", restaurantController.createRestaurant)
-restaurantRoutes.delete("/:restaurant_id", restaurantController.deleteRestaurantByID)
-restaurantRoutes.put("/:restaurant_id", restaurantController.updateRestaurantDetailsByID)
+restaurantRoutes.delete("/:restaurantId", restaurantController.deleteRestaurantByID)
+restaurantRoutes.put("/:restaurantId", restaurantController.updateRestaurantDetailsByID)
 
 restaurantRoutes.get("/search-keyword/:keyword", restaurantController.searchViaKeyword)
 restaurantRoutes.get("/search-bugdet/:budget", restaurantController.searchViaBudget)
-restaurantRoutes.get("/searchViaDistance/:id", restaurantController.searchViaDistance)
-restaurantRoutes.get("/searchViaCoordinates/:id", restaurantController.searchViaCoordinates)
 
-restaurantRoutes.get("/:restaurant_id/menu", restaurantController.getRestaurantMenu)
-restaurantRoutes.post("/:restaurant_id/menu", restaurantController.createRestaurantMenu)
-restaurantRoutes.put("/:restaurant_id/menu/:menu_id", restaurantController.updateRestaurantMenu)
-restaurantRoutes.delete("/:restaurant_id/menu/:menu_id", restaurantController.deleteRestaurantMenu)
-
-restaurantRoutes.get("/:restaurant_id/menu", restaurantController.getRestaurantMenu)
-restaurantRoutes.post("/:restaurant_id/menu", restaurantController.createRestaurantMenu)
-restaurantRoutes.put("/:restaurant_id/menu/:menu_id", restaurantController.updateRestaurantMenu)
-restaurantRoutes.delete("/:restaurant_id/menu/:menu_id", restaurantController.deleteRestaurantMenu)
+restaurantRoutes.get("/:restaurantId/menu", restaurantController.getRestaurantMenu)
+restaurantRoutes.post("/:restaurantId/menu", restaurantController.createRestaurantMenu)
+restaurantRoutes.put("/:restaurantId/menu/:menuId", restaurantController.updateRestaurantMenu)
+restaurantRoutes.delete("/:restaurantId/menu/:menuId", restaurantController.deleteRestaurantMenu)
 
 
 

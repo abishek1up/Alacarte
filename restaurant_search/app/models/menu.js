@@ -4,7 +4,7 @@ var test = require('mongoose');
 
 var MenuSchema = new mongoose.Schema({
   
-  menu_id: {     
+  menuId: {     
     type: Number,
     unique: true,
     min: [1, 'Must be at least 1'],
@@ -26,7 +26,7 @@ var MenuSchema = new mongoose.Schema({
     default: Date.now(),
   },
 },
-{ collection: 'menu' });
+{ collection: 'menu', timestamps: true });
 
 
 //minimum 3 letter title

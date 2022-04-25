@@ -5,8 +5,8 @@ const  { authValidate, authInitialize } = require("../middleware/auth.middleware
 const orderRoutes = express.Router()
 
 orderRoutes.get("/all/:customerId",authValidate, orderController.getAllMyOrders)
-orderRoutes.get("/:order_Id",authValidate, orderController.getOrder)
+orderRoutes.get("/:orderId",authValidate, orderController.getOrder)
 orderRoutes.post("/",authValidate, orderController.placeOrder)
-orderRoutes.delete("/:order_Id",authValidate, orderController.cancelOrder)
+orderRoutes.delete("/:orderId",authValidate, orderController.cancelOrder)
 
 module.exports = orderRoutes

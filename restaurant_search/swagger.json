@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "version": "2.0",
-        "title": "Restaurant",
+        "title": "Restaurant Search Service",
         "description": "Restaurant Search Service",
         "license": {
             "name": "MIT",
@@ -31,13 +31,13 @@
                         }
                     },
                     "400": {
-                        "description": "Invalid Status Value",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
                     }
                 }
-            },            
+            },
             "post": {
                 "summary": "Create a new Restaurant",
                 "description": "Create a new Restaurant",
@@ -51,31 +51,44 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "task object",
+                        "description": "createRestaurant object",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "properties": {
-                                "restaurant": {
-                                    "type": "object",
-                                    "$ref": "#/definitions/createRestaurant"
-                                }
-                            }
+                            "$ref": "#/definitions/createRestaurant"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Successful Operation",
+                    "201": {
+                        "description": "Restaurant Created Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant"
+                                "$ref": "#/definitions/SuccessResponse"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid Status Value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -83,7 +96,7 @@
                 }
             }
         },
-        "/{id}": {
+        "/{restaurantId}": {
             "get": {
                 "summary": "Get one Restaurant Data",
                 "description": "Get one Restaurant Data",
@@ -92,7 +105,7 @@
                 ],
                 "parameters": [
                     {
-                        "name": "restaurant_id",
+                        "name": "restaurantId",
                         "in": "path",
                         "description": "restaurant id that needs to be viewed",
                         "required": true,
@@ -101,16 +114,34 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful Operation",
+                        "description": "Restaurant Fetched Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant"
+                                "$ref": "#/definitions/SuccessResponse"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid status value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -118,14 +149,14 @@
                 }
             },
             "put": {
-                "summary": "Update the Restaurant Data",
-                "description": "Update the Restaurant Data",
+                "summary": "Update the Restaurant Data by Restaurant ID",
+                "description": "Update the Restaurant Data by Restaurant ID",
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "restaurantId",
                         "in": "path",
                         "description": "Restaurant Id that needs to be updated",
                         "required": true,
@@ -134,79 +165,95 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "task object",
+                        "description": "Restaurant Update object",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "properties": {
-                                "restaurant": {
-                                    "type": "object",
-                                    "$ref": "#/definitions/restaurant"
-                                }
-                            }
+                            "$ref": "#/definitions/createRestaurant"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful Operation",
+                        "description": "Restaurant Updated Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant"
+                                "$ref": "#/definitions/SuccessResponse"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid Status Value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
                     }
                 }
-            },           
+            },
             "delete": {
-                "summary": "Delete a Restaurant Data",
-                "description": "Delete a Restaurant Data",
+                "summary": "Delete a Restaurant Data by Restaurant ID",
+                "description": "Delete a Restaurant Data by Restaurant ID",
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "restaurantId",
                         "in": "path",
                         "description": "Restaurant Id that needs to be deleted",
                         "required": true,
                         "type": "string"
-                    },
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "task object",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "restaurant": {
-                                    "type": "object",
-                                    "$ref": "#/definitions/restaurant"
-                                }
-                            }
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful Operation",
+                        "description": "Restaurant Deleted Successfully",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/todosResponse"
+                                "$ref": "#/definitions/SuccessResponse"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid Status Value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -214,7 +261,7 @@
                 }
             }
         },
-        "/searchRestaurantViaDistance/{id}": {
+        "/search-keyword/{keyword}": {
             "get": {
                 "summary": "Search for Restaurant via Distance",
                 "description": "Search for Restaurant via Distance",
@@ -223,25 +270,43 @@
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "keyword",
                         "in": "path",
-                        "description": "Restaurant id that needs to be viewed",
+                        "description": "Keyword to search Restaurants",
                         "required": true,
-                        "type": "integer"
+                        "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful Operation",
+                        "description": "Restaurants Searched by Keyword",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant"
+                                "$ref": "#/definitions/SuccessResponse"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid status value",
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -249,7 +314,7 @@
                 }
             }
         },
-        "/searchRestaurantViaCoordinates/{id}": {
+        "/search-bugdet/{bugdet}": {
             "get": {
                 "summary": "Search for Restaurant via Coordinates",
                 "description": "Search for Restaurant via Coordinates",
@@ -258,9 +323,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "bugdet",
                         "in": "path",
-                        "description": "Restaurant id that needs to be viewed",
+                        "description": "bugdet to Search Restaurants",
                         "required": true,
                         "type": "integer"
                     }
@@ -277,6 +342,248 @@
                     },
                     "400": {
                         "description": "Invalid Status Value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{restaurantId}/menu": {
+            "get": {
+                "summary": "Get Menu based on Restaurant ID",
+                "description": "Get Menu based on Restaurant ID",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "restaurant id of the Menu",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu Fetched Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Update the Menu Data by Restaurant ID",
+                "description": "Update the Menu Data by Restaurant ID",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "Restaurant Id that needs to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Restaurant Update object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/menu"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Restaurant Updated Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/{restaurantId}/menu/{menuId}": {
+            "put": {
+                "summary": "Update Menu based on Menu Id and Restaurant ID",
+                "description": "Update Menu based on Menu Id and Restaurant ID",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "restaurant id of the Menu",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "menuId",
+                        "in": "path",
+                        "description": "menuId of the Menu",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Menu Details to be Updated",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/menu"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu Fetched Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a Restaurant Data by Restaurant ID",
+                "description": "Delete a Restaurant Data by Restaurant ID",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "restaurantId",
+                        "in": "path",
+                        "description": "Restaurant Id of the menu",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "menuId",
+                        "in": "path",
+                        "description": "Menu Id that needs to be deleted",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Restaurant Deleted Successfully",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SuccessResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "UnAuthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Entity Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity Error",
                         "schema": {
                             "$ref": "#/definitions/InvalidResponse"
                         }
@@ -302,10 +609,12 @@
                             "type": "object",
                             "properties": {
                                 "lat": {
-                                    "type": "integer"
+                                    "type": "number",
+                                    "multipleOf": 0.1
                                 },
                                 "lon": {
-                                    "type": "integer"
+                                    "type": "number",
+                                    "multipleOf": 0.1
                                 }
                             }
                         }
@@ -321,13 +630,11 @@
                     "type": "integer"
                 },
                 "ratings": {
-                    "type": "integer"
+                    "type": "number",
+                    "multipleOf": 0.1
                 },
                 "name": {
                     "type": "string"
-                },
-                "restaurant_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -347,10 +654,12 @@
                             "type": "object",
                             "properties": {
                                 "lat": {
-                                    "type": "integer"
+                                    "type": "number",
+                                    "multipleOf": 0.1
                                 },
                                 "lon": {
-                                    "type": "integer"
+                                    "type": "number",
+                                    "multipleOf": 0.1
                                 }
                             }
                         }
@@ -383,10 +692,12 @@
                             "type": "object",
                             "properties": {
                                 "lat": {
-                                    "type": "integer"
+                                    "type": "number",
+                                    "multipleOf": 0.1
                                 },
                                 "lon": {
-                                    "type": "integer"
+                                    "type": "number",
+                                    "multipleOf": 0.1
                                 }
                             }
                         }
@@ -397,14 +708,40 @@
                 },
                 "budget": {
                     "type": "integer"
-                },                
-                "total_review": {
+                },
+                "total_reviews": {
                     "type": "integer"
                 },
                 "ratings": {
-                    "type": "integer"
+                    "type": "number",
+                    "multipleOf": 0.1
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "menu": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "item_Id": {
+                                "type": "integer"
+                            },
+                            "item_Name": {
+                                "type": "string"
+                            },
+                            "item_Cost": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -419,6 +756,17 @@
                     "type": "string"
                 },
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "statusCode": {
+                    "type": "string"
+                },
+                "message": {
                     "type": "string"
                 }
             }

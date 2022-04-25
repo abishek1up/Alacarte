@@ -6,19 +6,31 @@ module.exports = {
     loginUser: async (req, res) => {
         try {
             logger.info('User login');
-            await loginSchema.validateAsync(req.body)
+
+            //Joi Validation
+            await loginSchema.validateAsync(req.body).then().catch(function (error) {
+                let err = new Error(error.message); err.status = 422; throw err;
+            })
+
+            //Service Layer Call
             var users = await customerService.loginUser(req.body);
             return res.status(users.StatusCode).json(users);
         }
         catch (err) {
-            logger.error(err.message);
-            res.status(422).json({ message: err.message });
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
         }
     },
     registerUser: async (req, res) => {
         try {
             logger.info('User Registration');
-            await registerSchema.validateAsync(req.body)
+
+            //Joi Validation
+            await registerSchema.validateAsync(req.body).then().catch(function (error) {
+                let err = new Error(error.message); err.status = 422; throw err;
+            })
+
+            //Service Layer Call
             var users = await customerService.registerUser(req.body);
             if (users.StatusCode == 201) {
                 var customer = await customerService.registerCustomer(req.body, users);
@@ -26,35 +38,49 @@ module.exports = {
             return res.status(users.StatusCode).json(users);
         }
         catch (err) {
-            logger.error(err.message);
-            res.status(422).json({ message: err.message });
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
         }
     },
     getCustomerDetail: async (req, res) => {
         try {
-            logger.info('Get User Details on Customer ID-'+ req.params.customerId);
-            await customerId.validateAsync(req.params.customerId)
+            logger.info('Get User Details on Customer ID-' + req.params.customerId);
+
+            //Joi Validation
+            await customerId.validateAsync(req.params.customerId).then().catch(function (error) {
+                let err = new Error("customerId" + error.message); err.status = 422; throw err;
+            })
+
+            //Service Layer Call
             const customers = await customerService.getCustomerDetail(req.params.customerId)
             if (customers.StatusCode == null) {
-                logger.info('User Details on Customer ID-'+req.params.customerId+', fetched Successfully');
+                logger.info('User Details on Customer ID-' + req.params.customerId + ', fetched Successfully');
                 return res.status(200).json(customers);
             }
             else
                 res.status(customers.StatusCode).json(customers);
         }
         catch (err) {
-            logger.error(err.message);
-            res.status(422).json({ message: err.message });
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
         }
     },
     updateCustomerDetail: async (req, res) => {
         try {
-            logger.info('Update User Details on Customer ID-'+ req.params.customerId);
-            await customerId.validateAsync(req.params.customerId)
-            await updateCustomerSchema.validateAsync(req.body)
+            logger.info('Update User Details on Customer ID-' + req.params.customerId);
+
+            //Joi Validation
+            await customerId.validateAsync(req.params.customerId).then().catch(function (error) {
+                let err = new Error("customerId" + error.message); err.status = 422; throw err;
+            })
+            await updateCustomerSchema.validateAsync(req.body).then().catch(function (error) {
+                let err = new Error(error.message); err.status = 422; throw err;
+            })
+
+            //Service Layer Call
             const customers = await customerService.updateCustomerDetail(req.params.customerId, req.body)
             if (customers.StatusCode == null) {
-                logger.info('User Details on Customer ID-'+req.params.customerId+', updated Successfully');
+                logger.info('User Details on Customer ID-' + req.params.customerId + ', updated Successfully');
                 return res.status(200).json(customers);
             }
             else {
@@ -62,17 +88,23 @@ module.exports = {
             }
         }
         catch (err) {
-            logger.error(err.message);
-            res.status(422).json({ message: err.message });
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
         }
     },
     deactivateUser: async (req, res) => {
         try {
-            logger.info('Delete User using Customer ID-'+ req.params.customerId);
-            await customerId.validateAsync(req.params.customerId)
+            logger.info('Delete User using Customer ID-' + req.params.customerId);
+
+            //Joi Validation
+            await customerId.validateAsync(req.params.customerId).then().catch(function (error) {
+                let err = new Error("customerId" + error.message); err.status = 422; throw err;
+            })
+
+            //Service Layer Call
             const check = await customerService.deactivateUser(req.params.customerId)
             if (check.acknowledged) {
-                logger.info('User on Customer ID-'+req.params.customerId+', deleted Successfully');
+                logger.info('User on Customer ID-' + req.params.customerId + ', deleted Successfully');
                 return res.status(200).json(check);
             }
             else {
@@ -80,8 +112,8 @@ module.exports = {
             }
         }
         catch (err) {
-            logger.error(err.message);
-            res.status(422).json({ message: err.message });
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
         }
     }
 

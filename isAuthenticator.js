@@ -29,7 +29,7 @@ function validateToken(req, res) {
     }
     try {
         var decoded = jwt.decode(token, process.env.JWTSECRET);
-        if (decoded.exp < (new Date().getTime() + 1) / 1000) {
+        if (decoded == null || decoded.exp < (new Date().getTime() + 1) / 1000) {
             logger.error("Token Expired. Please Login Again!");
             return res.status(401).json({ error: 'Token Expired. Please Login Again!' });
         }
@@ -40,7 +40,7 @@ function validateToken(req, res) {
 
     } catch (ex) {
         logger.error(ex.message)
-        res.status(400).json({ error: ex.message });
+        res.status(401).json({ error: ex.message });
         return;
     }
 
@@ -54,7 +54,7 @@ function authInitialize(req, res) {
     logger.info("Authenticating Credentials");
     try {
         var payload = req.body.data;
-        return res.json({ status: true, token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '5m', }), tokenExpiresIn : '5m' });
+        return res.json({ status: true, token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '10m', }), tokenExpiresIn : '10m' });
     }
     catch (err) {
         return res.json({ status: false, message: err.message });

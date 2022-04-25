@@ -4,7 +4,7 @@ const autoIncrement = require("mongoose-auto-increment");
 var mongoose = require('mongoose');
 
 var OrderSchema = new mongoose.Schema({
-  order_Id: {
+  orderId: {
     type: Number,
     min: [100, 'Must be at least 100'],
     max: 1000000000,
@@ -23,7 +23,7 @@ var OrderSchema = new mongoose.Schema({
     min: [0, 'Must be at least 0'],
     max: 100000
   },
-  restaurant_Id: {
+  restaurantId: {
     type: Number,
     min: [1000, 'Must be at least 1000'],
     max: 1000000000,
@@ -32,12 +32,8 @@ var OrderSchema = new mongoose.Schema({
     type: Number,
     min: [1000, 'Must be at least 1000'],
     max: 1000000000,
-  },
-  created_at: {
-    type: Date,
-    default: Date.now(),
-  },
-}, { collection: 'order' });
+  }
+}, { collection: 'order' , timestamps: true });
 
 
 
@@ -45,7 +41,7 @@ var OrderSchema = new mongoose.Schema({
 autoIncrement.initialize(mongoose.connection);
 OrderSchema.plugin(autoIncrement.plugin, {
   model: "order", // collection or table name in which you want to apply auto increment
-  field: "order_Id", // field of model which you want to auto increment
+  field: "orderId", // field of model which you want to auto increment
   startAt: 100, // start your auto increment value from 1
   incrementBy: 1, // incremented by 1
 });

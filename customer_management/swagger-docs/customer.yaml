@@ -13,18 +13,39 @@ paths:
         required: true   # can also be true depending on user preference
         schema:           # Schema definition
            type: integer
+      - in: header
+        name: Authorization     # name of request, can be any name
+        description: Authorization token
+        required: true   # can also be true depending on user preference
+        schema:           # Schema definition
+           type: string
       responses:          # server responses
         200:
-          description: An object with Customer details
+          description: Customer Details fetched Successfully
         401:
-          description: 401 - Unauthorized
-          $ref: '#/definitions/Unauthorized'
+          description: UnAuthorized
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/Unauthorized'
+        404:
+          description: Entity Not Found
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'
         400:
-          description: 400 - Bad Request
-          $ref: '#/definitions/BadRequest'   # <-----
+          description: Bad request
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'   # <-----
         422:
-          description: 422 - Unprocessable Entity
-          $ref: '#/definitions/BadRequest'  
+          description: Unprocessable Entity Error
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'
     put:                 # endpoint request type (post request)
       tags:               # Tag property
         - Customer            # Value of the tag
@@ -44,18 +65,39 @@ paths:
         required: true   # can also be true depending on user preference
         schema:           # Schema definition
            $ref: '#/definitions/CustomerUpdate' 
+      - in: header
+        name: Authorization     # name of request, can be any name
+        description: Authorization token
+        required: true   # can also be true depending on user preference
+        schema:           # Schema definition
+           type: string           
       responses:          # server responses
         200:
-          description: It enables a user to update the details
+          description: Customer Details Updated Successfully
         401:
-          description: 401 - Unauthorized
-          $ref: '#/definitions/Unauthorized'
+          description: UnAuthorized
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/Unauthorized'
+        404:
+          description: Entity Not Found
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'
         400:
-          description: 400 - Bad Request
-          $ref: '#/definitions/BadRequest'   # <-----
+          description: Bad request
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'   # <-----
         422:
-          description: 422 - Unprocessable Entity
-          $ref: '#/definitions/BadRequest'  
+          description: Unprocessable Entity Error
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest' 
     delete:                 # endpoint request type (post request)
       tags:               # Tag property
         - Customer            # Value of the tag
@@ -69,18 +111,40 @@ paths:
         required: true   # can also be true depending on user preference
         schema:           # Schema definition
           type: integer        # request parameters
+      - in: header
+        name: Authorization     # name of request, can be any name
+        description: Authorization token
+        required: true   # can also be true depending on user preference
+        schema:           # Schema definition
+           type: string
+
       responses:          # server responses
         200:
-          description: An object with user details
+          description: Customer Deactivated Successfully
         401:
-          description: 401 - Unauthorized
-          $ref: '#/definitions/Unauthorized'
+          description: UnAuthorized
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/Unauthorized'
         400:
-          description: 400 - Bad Request
-          $ref: '#/definitions/BadRequest'   # <-----
+          description: Bad request
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'   # <-----
+        404:
+          description: Entity Not Found
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'
         422:
-          description: 422 - Unprocessable Entity
-          $ref: '#/definitions/BadRequest'  
+          description: Unprocessable Entity Error
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'
 
 definitions:        # Schema defination for request body
   Customer:

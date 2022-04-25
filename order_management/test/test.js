@@ -27,24 +27,24 @@ describe('Order API', () => {
                     response.should.have.status(200);
                     response.body.should.be.a('array');
                     response.body.should.be.a('array').that.contains.something.like({customerId: 1019});
-                    response.body.should.be.a('array').that.contains.something.like({restaurant_Id: 403530});
+                    response.body.should.be.a('array').that.contains.something.like({restaurantId: 403530});
                 done();
                 });
         });
     });
 
-    describe("GET /order/:order_Id", () => {
+    describe("GET /order/:orderId", () => {
         it("It should GET the Order details", (done) => {
-            const order_Id = 110;
+            const orderId = 110;
             chai.request(server)                
-                .get("/order/"+order_Id)
+                .get("/order/"+orderId)
                 .set(header, value)
                 .end((err, response) => {
                     response.should.have.status(200);
                     response.body.should.have.property('OrderItems');
                     response.body.should.have.property('customerId');
-                    response.body.should.have.property('restaurant_Id');
-                    response.body.should.have.property('order_Id').eq(110);
+                    response.body.should.have.property('restaurantId');
+                    response.body.should.have.property('orderId').eq(110);
                 done();
                 });
         });
@@ -53,7 +53,7 @@ describe('Order API', () => {
     describe("POST /order/", () => {
         it("It should Update the Order details", (done) => {
             const requestBody = {
-                restaurant_Id : 403530,
+                restaurantId : 403530,
                 OrderItems : [1, 2, 3],
                 customerId : 1019
             }
@@ -66,19 +66,19 @@ describe('Order API', () => {
                     response.should.have.status(201);
                     response.body.should.have.property('OrderItems');
                     response.body.should.have.property('customerId');
-                    response.body.should.have.property('restaurant_Id');
-                    response.body.should.have.property('order_Id')
+                    response.body.should.have.property('restaurantId');
+                    response.body.should.have.property('orderId')
                 done();
                 });
         });
     });
 
 
-    describe("DELETE /order/:order_Id", () => {
+    describe("DELETE /order/:orderId", () => {
         it("It should delete the User/Order", (done) => {
-            const order_Id = 102;
+            const orderId = 102;
             chai.request(server)                
-                .delete("/order/"+order_Id)
+                .delete("/order/"+orderId)
                 .set(header, value)
                 .end((err, response) => {
                     response.should.have.status(200);
