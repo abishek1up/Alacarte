@@ -24,21 +24,18 @@ function validateToken(req, res) {
     var token = req.headers["x-auth-token"];
     if (!token) {
         if (req.headers["authorization"]) {
-            logger.error("check1");
             token = req.headers["authorization"].split(" ")[1].trim();
-            logger.error(token);
         }
     }
     try {
         var decoded = jwt.decode(token, process.env.JWTSECRET);
-        logger.info(decoded)
         if (decoded.exp < (new Date().getTime() + 1) / 1000) {
-            logger.error("Token Expired");
-            return res.status(403).json({ error: 'Token Expired' });
+            logger.error("Token Expired. Please Login Again!");
+            return res.status(401).json({ error: 'Token Expired. Please Login Again!' });
         }
         var result = jwt.verify(token, process.env.JWTSECRET, (err, user) => {
-            if (err) return res.status(403)
-            else if (user) return res.status(200)
+            if (err) return res.status(401).json({ message: err.message });
+            else if (user) return res.status(200).json({ message: 'Token is Valid' });
         })
 
     } catch (ex) {
@@ -49,7 +46,7 @@ function validateToken(req, res) {
 
 
     logger.info("Token is Valid");
-    res.status(200).json({ message: 'Token is Valid' });
+    //res.status(200).json({ message: 'Token is Valid' });
     return result
 }
 
@@ -57,7 +54,7 @@ function authInitialize(req, res) {
     logger.info("Authenticating Credentials");
     try {
         var payload = req.body.data;
-        return res.json({ status: true, token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '2m', }) });
+        return res.json({ status: true, token: jwt.sign(payload, process.env.JWTSECRET, { expiresIn: '5m', }), tokenExpiresIn : '5m' });
     }
     catch (err) {
         return res.json({ status: false, message: err.message });

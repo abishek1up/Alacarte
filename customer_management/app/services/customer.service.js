@@ -30,7 +30,7 @@ module.exports = {
                 if(!tokenGenerator.status){
                     return { Status: "Fail", StatusCode: 401, message: "Token not generated", error_info : token};
                 }
-                return { Status: "SUCCESS", StatusCode: 200, message: "User Logged in Successfully.", accessToken: tokenGenerator.token };
+                return { Status: "SUCCESS", StatusCode: 200, message: "User Logged in Successfully.", accessToken: tokenGenerator.token, tokenExpiresIn : tokenGenerator.tokenExpiresIn };
             }
         }
         else {
