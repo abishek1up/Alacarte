@@ -3,6 +3,45 @@ const redis = require('../services/redis.service')
 const { keyword, budget, restaurantCreateSchema, restaurantId, menuCreateSchema, menuId } = require("../models/validation")
 const logger = require("../config/winston")
 
+const url = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}`
+
+async function connectRedis() {
+    const client = redis.createClient({url});
+    
+      client.on('ready', () => logger.info('Redis Client Ready',));
+      client.on('error', (err) => logger.error('Redis Client Error'+err));
+
+      await client.connect();
+      return client;
+}
+
+async function setCache(key, data) {  
+    const client = await connectRedis()
+    const saveResult = await client.set(key, JSON.stringify(data))
+    logger.info('New Data Cached for key'+key)
+    return (saveResult)
+}
+
+async function getCache(key) {       
+    const client = await connectRedis()
+    const resp = await client.get(key)
+    if(resp)
+    {
+        logger.info("Cache is already present"+resp)
+        return true;
+    }
+    else
+        return false;   
+}
+
+async function delCache(key) {
+    const client = await connectRedis()
+    const resp = await client.del(key)
+   
+}
+
+
+
 module.exports = {
     getALLRestaurants: async (req, res) => {
         logger.info('Get All Orders of Restaurants');
@@ -164,10 +203,10 @@ module.exports = {
             //Service Layer Call
             const restaurants = await restaurantService.completeCache(req.params.restaurantId);
 
-            const result = await redis.getCache(req.params.restaurantId);
+            const result = getCache(req.params.restaurantId);
             if (!result) {
                 console.log('Restuarant Id-' + req.params.restaurantId + ' is Not Cached')
-                const saveResult = await redis.setCache(req.params.restaurantId, restaurants)
+                const saveResult = setCache(req.params.restaurantId, restaurants)
                 console.log('Cached Value', saveResult)
             }
 

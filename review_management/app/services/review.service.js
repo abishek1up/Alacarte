@@ -44,7 +44,8 @@ module.exports = {
             if (check != null) {
 
                 const reviews = await review.deleteOne({ review_Id: review_Id })
-                return { Status: "SUCCESS", StatusCode: 200, Message: "review Deleted", acknowledged: reviews.acknowledged }
+                console.log(reviews)
+                return { Status: "SUCCESS", StatusCode: 200, Message: "review Deleted", acknowledged: true }
             }
             else {
                 return { Status: "ERROR", StatusCode: 400, Message: "NO Review matching this review ID" };
@@ -95,15 +96,11 @@ module.exports = {
             return { Status: "ERROR", StatusCode: err.status, acknowledged: false, Message: err.message };
         }
     },
-    checkAvgRating: async () => {
-        const reviews = await review.findOne({ review_Id: review_Id })
-        var restaurantId = reviews.restaurantId;
-        const avgRating = await review.aggregate([{ $match: { "restaurantId": restaurantId } }, { "$group": { "_id": null, AverageValue: { $avg: "$rating" }, "restaurantId": restaurantId } }]);
+    checkAvgRating: async (restaurantId) => {
+        const avgRating = await review.aggregate([{ $match: { "restaurantId" : restaurantId } }, { "$group": { "_id": null, AverageValue: { $avg: "$rating" }} }]);
         return avgRating
     },
-    checktotalRatings: async () => {
-        const reviews = await review.findOne({ review_Id: review_Id })
-        var restaurantId = reviews.restaurantId;
+    checktotalRatings: async (restaurantId) => {
         const totalRatings = await review.aggregate(
             [
                 {
@@ -117,6 +114,11 @@ module.exports = {
             ]
         )
         return totalRatings
+    },
+    getRestID: async (review_Id) => {
+        const reviews = await review.findOne({ review_Id: review_Id })
+        return reviews.restaurantId;
     }
+    
 }
 

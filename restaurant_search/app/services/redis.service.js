@@ -5,10 +5,6 @@ require("dotenv").config()
 
 const url = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}`
 
-const responseTime = require('response-time')
-const { promisify } = require('util')
-
-
 async function connectRedis() {
     const client = redis.createClient({url});
     

@@ -10,7 +10,8 @@ const reviewCreateSchema = Joi.object({
 
 
 const reviewUpdateSchema = Joi.object({ 
-  review: Joi.string().min(4).max(200).required()
+  review: Joi.string().min(4).max(200).required(),
+  rating: Joi.number().min(1).max(5).required(),
 });  
 
 

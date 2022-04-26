@@ -52,11 +52,12 @@ module.exports = {
             const review = await reviewService.postReview(req.body)
             if (review.statusCode != 400) {
 
-                const avgRating = await reviewService.checkAvgRating()
+                logger.info(req.body.restaurantId)
+                const avgRating = await reviewService.checkAvgRating(req.body.restaurantId)
                 var avgRatingField = avgRating[0].AverageValue.toFixed(1);
-                var restaurantId = avgRatingField[0].restaurantId;
+                logger.info(avgRatingField)
 
-                const totalRating = await reviewService.checktotalRatings()
+                const totalRating = await reviewService.checktotalRatings(req.body.restaurantId)
                 var totalRatingField = totalRating[0].TotalRatings;
 
                 logger.info(totalRatingField)
@@ -65,7 +66,7 @@ module.exports = {
                     if (err != null) bail(err);
                     logger.info("Connected , Publish Review")
                     const data = {
-                        restaurantId: restaurantId,
+                        restaurantId: req.body.restaurantId,
                         avg_rating: avgRatingField,
                         totalRatings: totalRatingField
                     }
@@ -95,37 +96,32 @@ module.exports = {
             })
 
             //Service Layer Call
+
+            const restID = await reviewService.getRestID(req.params.review_Id)
+
             const check = await reviewService.deleteReview(req.params.review_Id)
-            if (check.acknowledged) {
+            if (!check.acknowledged) { let err = new Error(check.Message); err.status = check.StatusCode; throw err; }
+            
+            const avgRating = await reviewService.checkAvgRating(restID)
+            var avgRatingField = avgRating[0].AverageValue.toFixed(1);
+            
+            const totalRating = await reviewService.checktotalRatings(restID)
+            var totalRatingField = totalRating[0].TotalRatings;
 
-                
-                const avgRating = await reviewService.checkAvgRating()
-                var avgRatingField = avgRating[0].AverageValue.toFixed(1);
-                var restaurantId = avgRatingField[0].restaurantId;
-                
-                const totalRating = await reviewService.checktotalRatings()
-                var totalRatingField = totalRating[0].TotalRatings;
-
-                logger.info(totalRatingField)
-
-                rabbitClient.client.connect(url, function (err, conn) {
-                    if (err != null) bail(err);
-                    logger.info("Connected , Publish Review")
-                    const data = {
-                        restaurantId: restaurantId,
-                        avg_rating: avgRatingField,
-                        totalRatings: totalRatingField
-                    }
-                    rabbitClient.publish_review(conn, data);
-                    logger.info("Review Published")
-                });
+            rabbitClient.client.connect(url, function (err, conn) {
+                if (err != null) bail(err);
+                logger.info("Connected , Publish Review")
+                const data = {
+                    restaurantId: restID,
+                    avg_rating: avgRatingField,
+                    totalRatings: totalRatingField
+                }
+                rabbitClient.publish_review(conn, data);
+                logger.info("Review Published")
+            });
 
 
-                return res.status(200).json(check);
-            }
-            else {
-                return res.status(check.StatusCode).json(check);
-            }
+            return res.status(200).json(check);
         }
         catch (err) {
             logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
@@ -148,11 +144,12 @@ module.exports = {
             const reviews = await reviewService.updateReview(req.params.review_Id, req.body.review)
             if (reviews.StatusCode == null) {
 
-                const avgRating = await reviewService.checkAvgRating()
-                var avgRatingField = avgRating[0].AverageValue.toFixed(1);
-                var restaurantId = avgRatingField[0].restaurantId;
+                var restaurantId = await reviewService.getRestID(req.params.review_Id);
 
-                const totalRating = await reviewService.checktotalRatings()
+                const avgRating = await reviewService.checkAvgRating(restaurantId)
+                var avgRatingField = avgRating[0].AverageValue.toFixed(1);
+
+                const totalRating = await reviewService.checktotalRatings(restaurantId)
                 var totalRatingField = totalRating[0].TotalRatings;
 
                 logger.info(totalRatingField)

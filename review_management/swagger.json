@@ -351,6 +351,10 @@
         "reviewUpdate": {
             "type": "object",
             "properties": {
+                "rating": {
+                    "type": "number",
+                    "multipleOf": 0.1
+                },
                 "review": {
                     "type": "string"
                 }

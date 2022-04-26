@@ -25,15 +25,13 @@ var ReviewSchema = new mongoose.Schema({
   },   
   restaurantId: {
     type: Number,
-    unique: true,
     min: [999, 'Must be at least 1'],
     max: 1000000000 
   },  
   customerId: {
     type: Number,
     min: [1000, 'Must be at least 10'],
-    max: 1000000000,
-    unique: true,
+    max: 1000000000
   }
 }, { collection: 'review' , timestamps: true });
 
