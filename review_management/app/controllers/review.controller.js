@@ -52,10 +52,11 @@ module.exports = {
             const review = await reviewService.postReview(req.body)
             if (review.statusCode != 400) {
 
-                const avgRating = await reviewService.checkAvgRating(req.body.restaurantId)
+                const avgRating = await reviewService.checkAvgRating()
                 var avgRatingField = avgRating[0].AverageValue.toFixed(1);
+                var restaurantId = avgRatingField[0].restaurantId;
 
-                const totalRating = await reviewService.checktotalRatings(req.body.restaurantId)
+                const totalRating = await reviewService.checktotalRatings()
                 var totalRatingField = totalRating[0].TotalRatings;
 
                 logger.info(totalRatingField)
@@ -64,7 +65,7 @@ module.exports = {
                     if (err != null) bail(err);
                     logger.info("Connected , Publish Review")
                     const data = {
-                        restaurantId: req.body.restaurantId,
+                        restaurantId: restaurantId,
                         avg_rating: avgRatingField,
                         totalRatings: totalRatingField
                     }
@@ -96,6 +97,30 @@ module.exports = {
             //Service Layer Call
             const check = await reviewService.deleteReview(req.params.review_Id)
             if (check.acknowledged) {
+
+                
+                const avgRating = await reviewService.checkAvgRating()
+                var avgRatingField = avgRating[0].AverageValue.toFixed(1);
+                var restaurantId = avgRatingField[0].restaurantId;
+                
+                const totalRating = await reviewService.checktotalRatings()
+                var totalRatingField = totalRating[0].TotalRatings;
+
+                logger.info(totalRatingField)
+
+                rabbitClient.client.connect(url, function (err, conn) {
+                    if (err != null) bail(err);
+                    logger.info("Connected , Publish Review")
+                    const data = {
+                        restaurantId: restaurantId,
+                        avg_rating: avgRatingField,
+                        totalRatings: totalRatingField
+                    }
+                    rabbitClient.publish_review(conn, data);
+                    logger.info("Review Published")
+                });
+
+
                 return res.status(200).json(check);
             }
             else {
@@ -122,6 +147,29 @@ module.exports = {
             //Service Layer Call
             const reviews = await reviewService.updateReview(req.params.review_Id, req.body.review)
             if (reviews.StatusCode == null) {
+
+                const avgRating = await reviewService.checkAvgRating()
+                var avgRatingField = avgRating[0].AverageValue.toFixed(1);
+                var restaurantId = avgRatingField[0].restaurantId;
+
+                const totalRating = await reviewService.checktotalRatings()
+                var totalRatingField = totalRating[0].TotalRatings;
+
+                logger.info(totalRatingField)
+
+                rabbitClient.client.connect(url, function (err, conn) {
+                    if (err != null) bail(err);
+                    logger.info("Connected , Publish Review")
+                    const data = {
+                        restaurantId: restaurantId,
+                        avg_rating: avgRatingField,
+                        totalRatings: totalRatingField
+                    }
+                    rabbitClient.publish_review(conn, data);
+                    logger.info("Review Published")
+                });
+
+
                 return res.status(200).json(reviews);
             }
             else {

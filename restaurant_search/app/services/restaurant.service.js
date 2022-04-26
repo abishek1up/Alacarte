@@ -59,9 +59,9 @@ module.exports = {
             var check = await restaurant.findOne({ restaurantId: restaurantId })
             if (check != null) {
                 try {
-                    const customers = await restaurant.updateOne({ restaurantId: restaurantId }, { $set: { address: body.address, cuisine: body.cuisine, budget: body.budget, name: body.name } }, { new: true })
-                    const customers2 = await restaurant.findOne({ restaurantId: restaurantId })
-                    return customers2
+                    const restaurants = await restaurant.updateOne({ restaurantId: restaurantId }, { $set: { address: body.address, cuisine: body.cuisine, budget: body.budget, name: body.name } }, { new: true })
+                    const restaurants2 = await restaurant.findOne({ restaurantId: restaurantId })
+                    return restaurants2
 
                 }
                 catch (err) {

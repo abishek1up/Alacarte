@@ -3,6 +3,7 @@
 
 const review = require("../models/review")
 const axios = require("axios")
+const review2 = require("../models/review")
 
 module.exports = {
     getAllReviews: async () => {
@@ -54,11 +55,20 @@ module.exports = {
         }
     },
     updateReview: async (review_Id, review) => {
-        try {
-            const reviews = await review.updateOne({ review_Id: review_Id }, { $set: { "review" : review } }, { new: true })
-            return reviews
+        var check = await review2.findOne({ review_Id: review_Id })
+        if (check != null) {
+            try {
+                const reviews = await review2.updateOne({ review_Id: review_Id }, { $set: { review: review } }, { new: true })
+                const reviews2 = await review2.findOne({ review_Id: review_Id })
+                return reviews2
+
+            }
+            catch (err) {
+                return { Status: "ERROR", StatusCode: 400, Message: err.message };
+            }
         }
-        catch (err) {return { Status: "ERROR", StatusCode: 400, Message: err.message };
+        else {
+            return { Status: "ERROR", StatusCode: 400, Message: "No Review matching this Restaurant ID" };
         }
     },
     checkOrderValid: async (orderId,tokenHeader) => {
@@ -85,11 +95,15 @@ module.exports = {
             return { Status: "ERROR", StatusCode: err.status, acknowledged: false, Message: err.message };
         }
     },
-    checkAvgRating: async (restaurantId) => {
-        const avgRating = await review.aggregate([{ $match: { "restaurantId": restaurantId } }, { "$group": { "_id": null, AverageValue: { $avg: "$rating" } } }]);
+    checkAvgRating: async () => {
+        const reviews = await review.findOne({ review_Id: review_Id })
+        var restaurantId = reviews.restaurantId;
+        const avgRating = await review.aggregate([{ $match: { "restaurantId": restaurantId } }, { "$group": { "_id": null, AverageValue: { $avg: "$rating" }, "restaurantId": restaurantId } }]);
         return avgRating
     },
-    checktotalRatings: async (restaurantId) => {
+    checktotalRatings: async () => {
+        const reviews = await review.findOne({ review_Id: review_Id })
+        var restaurantId = reviews.restaurantId;
         const totalRatings = await review.aggregate(
             [
                 {
