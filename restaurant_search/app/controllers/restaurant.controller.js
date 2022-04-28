@@ -1,46 +1,7 @@
 const restaurantService = require("../services/restaurant.service")
-const redis = require('../services/redis.service')
+const Redis = require('../services/redis.service')
 const { keyword, budget, restaurantCreateSchema, restaurantId, menuCreateSchema, menuId } = require("../models/validation")
 const logger = require("../config/winston")
-
-const url = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}`
-
-async function connectRedis() {
-    const client = redis.createClient({url});
-    
-      client.on('ready', () => logger.info('Redis Client Ready',));
-      client.on('error', (err) => logger.error('Redis Client Error'+err));
-
-      await client.connect();
-      return client;
-}
-
-async function setCache(key, data) {  
-    const client = await connectRedis()
-    const saveResult = await client.set(key, JSON.stringify(data))
-    logger.info('New Data Cached for key'+key)
-    return (saveResult)
-}
-
-async function getCache(key) {       
-    const client = await connectRedis()
-    const resp = await client.get(key)
-    if(resp)
-    {
-        logger.info("Cache is already present"+resp)
-        return true;
-    }
-    else
-        return false;   
-}
-
-async function delCache(key) {
-    const client = await connectRedis()
-    const resp = await client.del(key)
-   
-}
-
-
 
 module.exports = {
     getALLRestaurants: async (req, res) => {
@@ -135,6 +96,7 @@ module.exports = {
              //Service Layer Call
             const restaurants = await restaurantService.updateRestaurantDetailsByID(req.params.restaurantId, req.body)
             if (restaurants.StatusCode == null) {
+                await Redis.delCache(req.params.restaurantId)
                 return res.status(200).json(restaurants);
             }
             else {
@@ -200,19 +162,29 @@ module.exports = {
                 let err = new Error("restaurantId :" + error.message); err.status = 422; throw err;
             })
 
-            //Service Layer Call
-            const restaurants = await restaurantService.completeCache(req.params.restaurantId);
-
-            const result = getCache(req.params.restaurantId);
-            if (!result) {
-                console.log('Restuarant Id-' + req.params.restaurantId + ' is Not Cached')
-                const saveResult = setCache(req.params.restaurantId, restaurants)
-                console.log('Cached Value', saveResult)
+            //Service Layer Call  
+            const restaurants = await restaurantService.getRestaurantByID(req.params.restaurantId)
+            if (restaurants.StatusCode == null){        
+              var result = await Redis.getCache(req.params.restaurantId);
+              if (!result.Status) {
+                logger.info('Restuarant Id-' + req.params.restaurantId + ' is Not Cached')
+                const restaurants = await restaurantService.completeCache(req.params.restaurantId);
+                const saveResult = await Redis.setCache(req.params.restaurantId, restaurants)
+                logger.info('Cached Value', saveResult)
+               
+                result = await Redis.getCache(req.params.restaurantId);
+                res.status(200).json(result.response);
+              }
+              else
+              {
+                res.status(200).json(result.response);
+              }
+            }
+            else{
+                res.status(restaurants.StatusCode).json(restaurants);
             }
 
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.json(restaurants);
+            
 
         }
         catch (err) {
@@ -285,6 +257,7 @@ module.exports = {
             //Service Layer Call
             const menus = await restaurantService.updateRestaurantMenu(req.params.restaurantId, req.params.menuId, req.body)
             if (menus.StatusCode == null) {
+                await Redis.delCache(req.params.restaurantId)
                 return res.status(200).json(menus);
             }
             else {

@@ -1,18 +1,50 @@
 require("dotenv").config()
 const reviewService = require("../services/review.service")
 const rabbitClient = require("../middleware/publisher.middleware")
-const { reviewUpdateSchema, reviewCreateSchema, orderId, review_Id } = require("../models/validation")
+const { reviewUpdateSchema, reviewCreateSchema, orderId, review_Id, customerId, restaurantId } = require("../models/validation")
+const Redis = require('../services/redis.service')
 const logger = require("../config/winston")
 
 const url = process.env.RABBIT_MQ_URL
 
 module.exports = {
-    getAllReviews: async (req, res) => {
-        const reviews = await reviewService.getAllReviews()
+    getAllReviewsByCustomer: async (req, res) => {
+        try {
+            logger.info('Get Review on customerId-' + req.params.customerId);
+
+            //Joi Validation
+            await customerId.validateAsync(req.params.customerId).then().catch(function (error) {
+                let err = new Error("customerId :" + error.message); err.status = 422; throw err;
+            })
+        const reviews = await reviewService.getAllReviewsByCustomer(req.params.customerId)
         if (reviews.StatusCode == null)
             return res.status(200).json(reviews);
         else
             res.status(reviews.StatusCode).json(reviews);
+        }
+        catch (err) {
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
+        }
+    },
+    getAllReviewsByRestaurant: async (req, res) => {
+        try {
+            logger.info('Get Review on restaurantId-' + req.params.restaurantId);
+
+            //Joi Validation
+            await restaurantId.validateAsync(req.params.restaurantId).then().catch(function (error) {
+                let err = new Error("restaurantId :" + error.message); err.status = 422; throw err;
+            })
+        const reviews = await reviewService.getAllReviewsByRestaurant(req.params.restaurantId)
+        if (reviews.StatusCode == null)
+            return res.status(200).json(reviews);
+        else
+            res.status(reviews.StatusCode).json(reviews);
+        }
+        catch (err) {
+            logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
+            res.status(err.status).json({ Status: 'ERROR', StatusCode: err.status, Message: err.message });
+        }
     },
     getReview: async (req, res) => {
         try {
@@ -88,7 +120,9 @@ module.exports = {
     },
     deleteReview: async (req, res) => {
         try {
-            logger.info('Delete Review ID-' + req.params.review_Id);
+            logger.info('Delete Review of Review ID-' + req.params.review_Id);
+
+            var restaurantId = await reviewService.getRestID(req.params.review_Id);
 
             //Joi Validation
             await review_Id.validateAsync(req.params.review_Id).then().catch(function (error) {
@@ -97,31 +131,32 @@ module.exports = {
 
             //Service Layer Call
 
-            const restID = await reviewService.getRestID(req.params.review_Id)
-
             const check = await reviewService.deleteReview(req.params.review_Id)
-            if (!check.acknowledged) { let err = new Error(check.Message); err.status = check.StatusCode; throw err; }
-            
-            const avgRating = await reviewService.checkAvgRating(restID)
-            var avgRatingField = avgRating[0].AverageValue.toFixed(1);
-            
-            const totalRating = await reviewService.checktotalRatings(restID)
-            var totalRatingField = totalRating[0].TotalRatings;
+            if (check.acknowledged) { 
 
-            rabbitClient.client.connect(url, function (err, conn) {
-                if (err != null) bail(err);
-                logger.info("Connected , Publish Review")
-                const data = {
-                    restaurantId: restID,
-                    avg_rating: avgRatingField,
-                    totalRatings: totalRatingField
-                }
-                rabbitClient.publish_review(conn, data);
-                logger.info("Review Published")
-            });
+                const avgRating = await reviewService.checkAvgRating(restaurantId)
+                var avgRatingField = avgRating[0].AverageValue.toFixed(1);
 
+                const totalRating = await reviewService.checktotalRatings(restaurantId)
+                var totalRatingField = totalRating[0].TotalRatings;
+
+                logger.info(totalRatingField)
+
+                rabbitClient.client.connect(url, function (err, conn) {
+                    if (err != null) bail(err);
+                    logger.info("Connected , Publish Review")
+                    const data = {
+                        restaurantId: restaurantId,
+                        avg_rating: avgRatingField,
+                        totalRatings: totalRatingField
+                    }
+                    rabbitClient.publish_review(conn, data);
+                    logger.info("Review Published")
+                });
+         
 
             return res.status(200).json(check);
+            }
         }
         catch (err) {
             logger.error('Error, StatusCode:' + err.status + " ,Message :" + err.message);
@@ -141,8 +176,9 @@ module.exports = {
             })
 
             //Service Layer Call
-            const reviews = await reviewService.updateReview(req.params.review_Id, req.body.review)
+            const reviews = await reviewService.updateReview(req.params.review_Id, req.body.review, req.body.rating)
             if (reviews.StatusCode == null) {
+                await Redis.delCache(req.params.restaurantId);
 
                 var restaurantId = await reviewService.getRestID(req.params.review_Id);
 

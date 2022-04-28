@@ -1,5 +1,3 @@
-const Sequelize = require('sequelize');
-const DataTypes = require('mysql');
 const autoIncrement = require("mongoose-auto-increment");
 var mongoose = require('mongoose');
 

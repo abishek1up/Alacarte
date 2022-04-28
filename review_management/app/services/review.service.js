@@ -6,10 +6,26 @@ const axios = require("axios")
 const review2 = require("../models/review")
 
 module.exports = {
-    getAllReviews: async () => {
+    getAllReviewsByCustomer: async (customerId) => {
         try {
-            const reviews = await review.find().exec()
-            if (reviews != null) {
+            console.log("chjeck1")
+            const reviews = await review.find({ customerId: customerId })
+            console.log(reviews)
+            if (reviews != null && reviews.length > 0) {
+                return reviews
+            }
+            else {
+                return { Status: "ERROR", StatusCode: 400, Message: "No Reviews are present" };
+            }
+        }
+        catch (err) {
+            return { Status: "ERROR", StatusCode: 400, Message: err.message };
+        }
+    },
+    getAllReviewsByRestaurant: async (restaurantId) => {
+        try {
+            const reviews = await review.find({ restaurantId: restaurantId })
+            if (reviews != null && reviews.length > 0) {
                 return reviews
             }
             else {
@@ -42,10 +58,8 @@ module.exports = {
         try {
             var check = await review.findOne({ review_Id: review_Id })
             if (check != null) {
-
                 const reviews = await review.deleteOne({ review_Id: review_Id })
-                console.log(reviews)
-                return { Status: "SUCCESS", StatusCode: 200, Message: "review Deleted", acknowledged: true }
+                return { Status: "SUCCESS", StatusCode: 200, Message: "Review ID:"+review_Id+" Deleted", acknowledged: reviews.acknowledged }
             }
             else {
                 return { Status: "ERROR", StatusCode: 400, Message: "NO Review matching this review ID" };
@@ -55,11 +69,11 @@ module.exports = {
             return { Status: "ERROR", StatusCode: 400, Message: err.message };
         }
     },
-    updateReview: async (review_Id, review) => {
+    updateReview: async (review_Id, review, rating) => {
         var check = await review2.findOne({ review_Id: review_Id })
         if (check != null) {
             try {
-                const reviews = await review2.updateOne({ review_Id: review_Id }, { $set: { review: review } }, { new: true })
+                const reviews = await review2.updateOne({ review_Id: review_Id }, { $set: { review: review,  rating: rating } }, { new: true })
                 const reviews2 = await review2.findOne({ review_Id: review_Id })
                 return reviews2
 

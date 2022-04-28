@@ -3,6 +3,7 @@
 
 const restaurant = require("../models/restaurant")
 const menu = require("../models/menu")
+const axios = require('axios');
 
 module.exports = {
     // params is object, for parameters from controllers
@@ -120,16 +121,24 @@ module.exports = {
 
     completeCache: async (restaurantId) => {
         try {
-            const restaurants = await restaurant.findOne({ restaurantId: restaurantId })
-            if (restaurants != null) {
-                const menus = await menu.findOne({ menuId: restaurants.menuId })
-                if (menus != null) {
-                    var wholeCache = { restaurant : restaurants, menu : menus};
-                    return wholeCache
-                }
-                else {
-                    return restaurants;
-                }
+            var restaurants = [];
+            restaurants =  await restaurant.findOne({ restaurantId: restaurantId })
+            
+            if(restaurants != null){
+            var menus = await menu.findOne({ menuId: restaurants.menuId })
+            if(!menus) { menus = []; }
+
+            var getReviewsforRestaurant = await axios.get("http://localhost:8081/reviews/restaurant_new/" + restaurantId)
+            .then(function (response) {
+                if (response.status != 200) {  return { status : 400, message : error.response.data.Message, data : [] }; }
+                return response;
+            })
+            .catch(function (error) {
+                return { status : 400, message : error.response.data.Message, data : [] };
+            })
+
+            var wholeCache = { restaurant : restaurants, menu : menus, reviews : getReviewsforRestaurant.data};
+            return wholeCache;
             }
             else {
                 return { Status: "ERROR", StatusCode: 400, Message: "No restaurant for this Restaurant Id" };

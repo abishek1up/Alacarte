@@ -17,7 +17,9 @@ const reviewUpdateSchema = Joi.object({
 
 const review_Id = Joi.number().min(1000).max(1000000000)
 const orderId = Joi.number().min(100).max(1000000000)
+const restaurantId = Joi.number().min(999).max(1000000000)
+const customerId = Joi.number().min(1000).max(1000000000)
 
   module.exports = {
-    reviewUpdateSchema, reviewCreateSchema, orderId, review_Id
+    reviewUpdateSchema, reviewCreateSchema, orderId, review_Id, restaurantId, customerId
   }

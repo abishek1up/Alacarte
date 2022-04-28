@@ -3,8 +3,6 @@
 const logger = require("../config/winston")
 const Order = require("../models/order")
 const connectPostgres = require("../config/orderdb");
-const axios = require('axios');
-const { AxiosResponse, AxiosError } = require('axios');
 module.exports = {
 
     getAllMyOrders: async (customerId) => {
