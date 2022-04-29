@@ -23,6 +23,8 @@ Redis.setCache = async(key, data) => {
 Redis.delCache = async(key) => {
     const client = await connectRedis()
     const resp = await client.del(key)
+    logger.info('Cached data deleted for RestaurantID :'+key)
+    return (resp)
 }
 
 async function connectRedis() {

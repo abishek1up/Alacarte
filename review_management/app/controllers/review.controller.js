@@ -124,6 +124,7 @@ module.exports = {
 
             var restaurantId = await reviewService.getRestID(req.params.review_Id);
 
+            var delCache = await Redis.delCache(restaurantId);
             //Joi Validation
             await review_Id.validateAsync(req.params.review_Id).then().catch(function (error) {
                 let err = new Error("review_Id :" + error.message); err.status = 422; throw err;
@@ -178,10 +179,10 @@ module.exports = {
             //Service Layer Call
             const reviews = await reviewService.updateReview(req.params.review_Id, req.body.review, req.body.rating)
             if (reviews.StatusCode == null) {
-                await Redis.delCache(req.params.restaurantId);
-
+                
                 var restaurantId = await reviewService.getRestID(req.params.review_Id);
 
+                var delCache = await Redis.delCache(restaurantId);
                 const avgRating = await reviewService.checkAvgRating(restaurantId)
                 var avgRatingField = avgRating[0].AverageValue.toFixed(1);
 

@@ -8,7 +8,6 @@ let Redis = {};
 Redis.getCache = async(key) => {      
         const client = await connectRedis()
         const resp = await client.get(key)
-        console.log(resp)
         if(resp)  
             return {Message : "Cache Present for RestaurantID :"+key, Status : true, response : JSON.parse(resp) };
         else

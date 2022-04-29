@@ -286,6 +286,7 @@ module.exports = {
             //Service Layer Call
             const check = await restaurantService.deleteRestaurantMenu(req.params.restaurantId, req.params.menuId)
             if (check.acknowledged) {
+                var delCache = await Redis.delCache(req.params.restaurantId);
                 return res.status(200).json(check);
             }
             else {

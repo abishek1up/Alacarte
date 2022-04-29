@@ -29,6 +29,7 @@
     "mongoose-auto-increment": "^5.0.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
+    "pm2": "^5.2.0",
     "sinon": "^13.0.1",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.3.0",
