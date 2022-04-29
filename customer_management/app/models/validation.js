@@ -6,7 +6,7 @@ const loginSchema = Joi.object({
   });   
 
 const registerSchema = Joi.object({ 
-  customerName: Joi.string().min(3).max(30).required(),
+  customerName: Joi.string().min(2).max(30).required(),
   email: Joi.string().email().min(4).max(30).required(),
   password: Joi.string().min(4).max(30).required(),
   location: Joi.object({ 
@@ -16,7 +16,7 @@ const registerSchema = Joi.object({
 });  
 
 const updateCustomerSchema = Joi.object({ 
-  customerName: Joi.string().min(3).max(30).required(),
+  customerName: Joi.string().min(2).max(30).required(),
   location: Joi.object({ 
     city: Joi.string().min(4).max(20).required(),
     state: Joi.string().min(4).max(30).required(),

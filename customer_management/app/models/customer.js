@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var CustomerSchema = new mongoose.Schema({
   customerName: {
     type: String,
-    minlength: 4,
+    minlength: 2,
     maxlength: 30,
     message: 'String length should be within 4 to 20 Characters',
   },

@@ -2,6 +2,7 @@ const restaurantService = require("../services/restaurant.service")
 const Redis = require('../services/redis.service')
 const { keyword, budget, restaurantCreateSchema, restaurantId, menuCreateSchema, menuId } = require("../models/validation")
 const logger = require("../config/winston")
+const faker = require("faker")
 
 module.exports = {
     getALLRestaurants: async (req, res) => {

@@ -50,7 +50,7 @@ var RestaurantSchema = new mongoose.Schema({
   name: {
     type: String,
     minlength: 4,
-    maxlength: 20,
+    maxlength: 30,
     message :'String length should be within 4 to 20 Characters' ,
     index: true
   },

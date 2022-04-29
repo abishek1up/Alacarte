@@ -39,6 +39,7 @@ module.exports = {
             return { Status: "Fail", StatusCode: 409, Message: "User Email ID already exists" };
         }
         else {
+            
             var users = await User.create({ email: body.email, password: body.password })
                 .then(function (newUser) {
                     return { Status: "SUCCESS", StatusCode: 201, Message: "New User Registered", customerId: newUser.customerId };
