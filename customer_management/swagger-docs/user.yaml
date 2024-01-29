@@ -1,0 +1,119 @@
+paths:
+  /user/login:           # path of the user from your endpoint
+    post:                 # endpoint request type (post request)
+      tags:               # Tag property
+        - User            # Value of the tag
+      summary: User Login
+      produces:
+      - application/json
+      parameters:         # request parameters
+      - in: body          # request body
+        name: login     # name of request, can be any name
+        description: It enables a user to login
+        required: false   # can also be true depending on user preference
+        schema:           # Schema definition
+          $ref: '#/definitions/UserLogin' 
+      responses:          # server responses
+        201:
+          description: New User Registered
+        401:
+          description: UnAuthorized
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/Unauthorized'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: Unprocessable Entity Error
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'  
+
+  /user/register:       # path of the user from your endpoint
+    post:                 # endpoint request type (post request)
+      tags:               # Tag property
+        - User            # Value of the tag
+      summary: Registers a new user
+      produces:
+      - application/json
+      parameters:         # request parameters
+      - in: body          # request body
+        name: register     # name of request, can be any name
+        description: It enables a user to create an account
+        required: false   # can also be true depending on user preference
+        schema:           # Schema definition
+          $ref: '#/definitions/UserRegister' 
+      responses:          # server responses
+        201:
+          description: User Registered
+        401:
+          description: UnAuthorized
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/Unauthorized'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'   # <-----
+        422:
+          description: Unprocessable Entity Error
+          content:
+            application/json:
+              schema:
+               $ref: '#/definitions/BadRequest'
+
+definitions:        # Schema defination for request body
+  UserRegister:
+    type: object
+    properties:
+      customerName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      location:
+        type: object
+        properties:
+          city:
+            type: string
+          state:
+            type: string
+  UserLogin:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string            
+  BadRequest:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+            type: string
+  Unauthorized:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string     
+  NotFound:
+    type: object
+    properties:
+      statusCode:
+        type: string
+      message:
+        type: string   
+                

@@ -1,0 +1,35 @@
+{
+  "name": "isAuthenticator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "isAuthenticator.js",
+  "scripts": {
+    "start": "nodemon isAuthenticator.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abishek1up/NodeJS_Restaurant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abishek1up/NodeJS_Restaurant/issues"
+  },
+  "homepage": "https://github.com/abishek1up/NodeJS_Restaurant#readme",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.7",
+    "express": "^4.17.3",
+    "json-server": "^0.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.29.3",
+    "nodemon": "^2.0.15",
+    "path": "^0.12.7",
+    "winston": "^3.7.2"
+  }
+}
