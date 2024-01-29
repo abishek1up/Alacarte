@@ -11,7 +11,7 @@ module.exports = {
     if (error) {
       console.log({ Status: "ERROR", StatusCode: 302, Message: error.message });
     }
-
+    console.log();
     const { email, password } = body;
     const data = await User.find({ email: email }).exec().then();
     console.log(data);
