@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema(
 
 autoIncrement.initialize(mongoose.connection);
 userSchema.plugin(autoIncrement.plugin, {
-  model: "Users",
+  model: "users",
   field: "customerId",
   startAt: 1000,
   incrementBy: 1,
 });
 
-module.exports = Users = mongoose.model("Users", userSchema);
+module.exports = Users = mongoose.model("users", userSchema);
