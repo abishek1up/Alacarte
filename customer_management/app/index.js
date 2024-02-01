@@ -4,8 +4,6 @@ const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const express = require("express");
 const cors = require("cors");
-var winston = require("./config/winston");
-const morgan = require("morgan");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
@@ -20,15 +18,15 @@ const swaggerDefinition = {
   info: {
     title: "Customer Management Services",
     version: "1.0.0",
-    description: "Customer Management Services",
+    description: "Customer Management Services"
   },
   host: "localhost:" + process.env.PORT,
-  basePath: "/",
+  basePath: "/"
 };
 
 const options = {
   swaggerDefinition,
-  apis: ["./swagger-docs/**/*.yaml"],
+  apis: ["./swagger-docs/**/*.yaml"]
 };
 
 const swaggerSpec = swaggerJSDoc(options);
